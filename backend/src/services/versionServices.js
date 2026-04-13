@@ -1,17 +1,26 @@
 import * as repo from "../repositories/versionRepository.js";
+import { createLog} from "./logServices.js";
 
+export const getAll = async({page, limit}) => {
 
-/* arquivo responsavel por validar dados, impledir duplicidade, controlar acesso */
+    const offset = (page - 1) * limit;
+    const { count, rows } = await Version.findAndCountAll({
+    limit: Number(limit),
+    offset: Number(offset),
+    });
 
-/* Esse services ele conversa diretamente com o Controller, ou seja, quando o controler recebe uma requisição getAll por exemplo,
-    esse getAll vai agir conforme inserimos as regras aqui!
-*/
-
-export const getAll = async() => {
-    return await repo.findAll();
+    return {
+    data: rows,
+    total: count,
+    page: Number(page),
+    totalPages: Math.ceil(count / limit),
+    };
 };
 
-export const create = async(data) => {
-    // Aqui entra validação futuramente
-    return await repo.create(data);
+export const create = async(data, userId) => {
+    const record = await repo.create(data);
+    
+    await createLog(userId, "CREATE", record.id);
+
+    return record;
 };

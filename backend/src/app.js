@@ -7,7 +7,7 @@ import versionRoutes from "./routes/versionRoutes.js";
 const app = express();
 
 app.use(express.json());
-app.use(cors()); // verify securit, this model is to any origin
+app.use(cors());
 /*app.use(cors({
   origin: "http://localhost:3000"
 }));*/
