@@ -8,10 +8,9 @@ import authRoutes from "./routes/authRoutes.js";
 const app = express();
 
 app.use(express.json());
-app.use(cors());
-/*app.use(cors({
+app.use(cors({
   origin: "http://localhost:3000"
-}));*/
+}));
 app.use(helmet());
 
 app.use("/version", versionRoutes); // tudo que começa com /version vai pra esse setor
