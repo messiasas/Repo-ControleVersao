@@ -1,10 +1,11 @@
 import * as repo from "../repositories/versionRepository.js";
+import VersionControl from "../models/VersionControl.js";
 import { createLog} from "./logServices.js";
 
 export const getAll = async({page, limit}) => {
 
     const offset = (page - 1) * limit;
-    const { count, rows } = await Version.findAndCountAll({
+    const { count, rows } = await VersionControl.findAndCountAll({
     limit: Number(limit),
     offset: Number(offset),
     });

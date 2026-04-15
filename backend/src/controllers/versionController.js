@@ -4,7 +4,7 @@ export const getAll = async(req, res) => {
     try {
         const { page = 1, limit = 10 } = req.query;
 
-        const result = await versionService.getAll({page,limit});
+        const result = await service.getAll({page: Number(page),limit: Number(limit)});
 
         return res.json(result);
     }catch (error){
