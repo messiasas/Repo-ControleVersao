@@ -2,9 +2,27 @@ import * as service from "../services/versionServices.js";
 
 export const getAll = async(req, res) => {
     try {
-        const { page = 1, limit = 10 } = req.query;
+        const { page = 1, limit = 10, sort, order, ...filters } = req.query;
 
-        const result = await service.getAll({page: Number(page),limit: Number(limit)});
+            /*
+      filters agora contém QUALQUER filtro vindo da URL
+
+      Exemplo:
+      GET /versions?empresa=XPTO&modelo=ABC
+
+      filters = {
+        empresa: "XPTO",
+        modelo: "ABC"
+      }
+    */
+
+        const result = await service.getAll({
+            page: Number(page),
+            limit: Number(limit),
+            sort,
+            order,
+            filters
+        }); // O filter passa tudo de forma dinamica
 
         return res.json(result);
     }catch (error){
