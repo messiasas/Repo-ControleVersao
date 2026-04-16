@@ -14,29 +14,32 @@ export const getAll = async({page, limit, sort, order, filters}) => {
 
     const where = {};
 
-    const safeLimit = Math.min(Number(limit) || 10, 100);
-    const safePage = Math.max(Number(page) || 1, 1);
+    const safeLimit = Math.min(Number(limit) || 10, 100); // minimo padrao 10, maximo permitido 100
+    const safePage = Math.max(Number(page) || 1, 1); // limita a pagina, para nao ser 0 nem negativo
 
     for(const key in filters || {}){
-        if(!allowedFilters.includes(key)) continue;
+        if(!allowedFilters.includes(key)) continue; // perminte filtros definidos, evitando ataques diretos ao banco como "DROP DATABASE"
 
         const value = filters[key];
-        if (!value || !String(value).trim()) continue;
+        if (!value || !String(value).trim()) continue; // Remove espaços (!String(value).trim())
 
         if (key === "versao_so") {
             where[key] = String(value);
             } else {
             where[key] = {
-                [Op.like]: `%${value}%` // risco também
+                // O usuário espera busca por “começa com” ou “contém”?
+                [Op.like]: `${value}%` // risco também
             }; 
         };
     }
+                                                                // sort (portugues: classificar) é o campo que queremos ordenar, por exemplo ?sort=empresa - isto é ordenar pelos nomes das empresas
+    const sortField = allowedSortFields.includes(sort) ? sort: "createdAt"; //Se o campo enviado é válido, usa ele. Senão, usa createdAt, createdAt é para "Mais recente primeiro" caso o user nao especifique
+    const sortOrder = order === "DESC" ? "DESC" : "ASC"; // ordem descendente, se for algo invalido -> ASC (ascendente)
 
-    const sortField = allowedSortFields.includes(sort) ? sort: "createdAt";
-    const sortOrder = order === "DESC" ? "DESC" : "ASC";
-    const orderClause = [[sortField, sortOrder]];
+    const orderClause = [[sortField, sortOrder]]; // orderClause [[classificar=empresas, orderm=crescente]] -> MySQL -> ORDER BY empresa ASC
 
     const offset = (safePage - 1) * safeLimit;
+
     const { count, rows } = await VersionControl.findAndCountAll({
     where,
     limit: safeLimit,
@@ -47,11 +50,11 @@ export const getAll = async({page, limit, sort, order, filters}) => {
     return {
     data: rows,
     meta: {
-        totalItems: count,
-        itemCount: rows.length,
-        itemsPerPage: safeLimit,
-        totalPages: Math.ceil(count/ safeLimit),
-        currentPage: safePage
+        totalItems: count, // totalItems": 100,
+        itemCount: rows.length, // "itemCount": 10,
+        itemsPerPage: safeLimit, // "itemsPerPage": 10,
+        totalPages: Math.ceil(count/ safeLimit), // "totalPages": 10,
+        currentPage: safePage //"currentPage": 1
     }
     };
 };

@@ -23,6 +23,4 @@ export const versionSchema = Joi.object({
 
   fonte: Joi.string().optional(),
   tipo_chaves: Joi.string().optional(),
-
-  data_criacao: Joi.date().optional()
 });

@@ -25,7 +25,15 @@ const VersionControl = sequelize.define("VersionControl",
     
     fonte: DataTypes.STRING,
     tipo_chaves: DataTypes.STRING,
-    data_criacao: DataTypes.DATE
+    
+}, {
+
+    indexes: [
+        { name: "idx_empresa", fields: ["empresa"] },
+        { name: "idx_modelo", fields: ["modelo"] },
+        { name: "idx_versao_so", fields: ["versao_so"] },
+        { name: "idx_createdAt", fields: ["createdAt"] }
+    ]
 });
 
 export default VersionControl;

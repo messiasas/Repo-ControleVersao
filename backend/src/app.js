@@ -13,7 +13,7 @@ app.use(cors({
 }));
 app.use(helmet());
 
-app.use("/version", versionRoutes); // tudo que começa com /version vai pra esse setor
+app.use("/versions", versionRoutes); // tudo que começa com /version vai pra esse setor
 app.use("/auth", authRoutes);
 
 export default app;
