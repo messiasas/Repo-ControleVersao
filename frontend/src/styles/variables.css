@@ -1,0 +1,8 @@
+:root {
+  --color-primary: #3E6B57;
+  --color-text: #ffffff;
+  --color-bg: #f5f6fa;
+
+  --header-height: 50px;
+  --spacing: 16px;
+}

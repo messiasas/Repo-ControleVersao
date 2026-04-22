@@ -7,7 +7,7 @@ import { validate } from "../middlewares/validate.js";
 
 const router = express.Router();
 
-router.get("/", authMiddleware, controller.getAll);
+router.get("/", controller.getAll); // authMiddleware
 router.post("/", validate(versionSchema), authMiddleware, isAdmin, controller.create);
 
 export default router;
