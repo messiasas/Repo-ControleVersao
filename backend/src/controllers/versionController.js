@@ -2,7 +2,7 @@ import * as service from "../services/versionServices.js";
 
 export const getAll = async(req, res) => {
     try {
-        const { page = 1, limit = 10, sort, order, ...filters } = req.query;
+        const { page = 1, limit, sort, order, ...filters } = req.query;
 
             /*
       filters agora contém QUALQUER filtro vindo da URL
@@ -18,7 +18,7 @@ export const getAll = async(req, res) => {
 
         const result = await service.getAll({
             page: Number(page),
-            limit: Number(limit),
+            limit: limit ? Number(limit) : null,
             sort,
             order,
             filters

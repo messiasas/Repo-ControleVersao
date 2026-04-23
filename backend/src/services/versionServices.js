@@ -14,8 +14,10 @@ export const getAll = async({page, limit, sort, order, filters}) => {
 
     const where = {};
 
-    const safeLimit = Math.min(Number(limit) || 10, 100); // minimo padrao 10, maximo permitido 100
-    const safePage = Math.max(Number(page) || 1, 1); // limita a pagina, para nao ser 0 nem negativo
+    const parsedLimit = Number(limit);
+    const safeLimit = parsedLimit ? Math.min(parsedLimit, 1000) : null;
+
+    const safePage = Math.max(Number(page) || 1, 1);
 
     for(const key in filters || {}){
         if(!allowedFilters.includes(key)) continue; // perminte filtros definidos, evitando ataques diretos ao banco como "DROP DATABASE"
@@ -38,14 +40,18 @@ export const getAll = async({page, limit, sort, order, filters}) => {
 
     const orderClause = [[sortField, sortOrder]]; // orderClause [[classificar=empresas, orderm=crescente]] -> MySQL -> ORDER BY empresa ASC
 
-    const offset = (safePage - 1) * safeLimit;
+    const offset = safeLimit ? (safePage - 1) * safeLimit : 0;
 
-    const { count, rows } = await VersionControl.findAndCountAll({
+    const queryOptions  = {
     where,
-    limit: safeLimit,
-    offset,
     order: orderClause
-    });
+    };
+
+    if (safeLimit) {
+        queryOptions.limit = safeLimit;
+        queryOptions.offset = offset;
+    }
+    const { count, rows } = await VersionControl.findAndCountAll(queryOptions);
 
     return {
     data: rows,
