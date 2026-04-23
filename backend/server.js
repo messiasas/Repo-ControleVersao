@@ -8,6 +8,7 @@ async function startServer(){
         await sequelize.authenticate();
         console.log("Conectado ao banco.");
 
+        await sequelize.sync({ alter: true });
         app.listen(PORT, () => {
             console.log(`Server rodando na port: ${PORT}`);
         });
