@@ -7,7 +7,7 @@ function Home(){
     const [data, setData] = useState([]);
 
       // 🔥 AQUI
-    const getRowColor = (empresa) => {
+    /*const getRowColor = (empresa) => {
         const colors = {
         PAGSEGURO: "#d6eaff",
         CIELO: "#ffe6e6",
@@ -16,7 +16,7 @@ function Home(){
         };
 
     return colors[empresa?.toUpperCase()] || "#ffffff";
-    };
+    };*/
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,6 +35,7 @@ function Home(){
 
         <div className="toolbar">
             <input placeholder="Digite sua busca..." />
+            <input className="chaves" placeholder="Quantidade de chaves" />
             <button>+ Filtros</button>
         </div>
 
@@ -64,12 +65,8 @@ function Home(){
 
             <tbody>
             {data?.map((item) => (
-                 <tr
-                key={item.id}
-                style={{
-                    backgroundColor: getRowColor(item.empresa),
-                    color: "#000" // contraste
-                }} className={`row-${item.empresa}`}>
+                <tr
+                key={item.id}>
                 <td>{item.empresa}</td>
                 <td>{item.equipamento}</td>
                 <td>{item.modelo}</td>
