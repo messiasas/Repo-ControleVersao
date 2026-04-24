@@ -1,4 +1,5 @@
 import {Sequelize} from "sequelize";
+import { Op, fn, col, where as sequelizeWhere } from "sequelize";
 import dotenv from "dotenv";
 
 dotenv.config(); // take configs insert on .env file
