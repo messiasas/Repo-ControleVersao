@@ -1,8 +1,9 @@
 import * as service from "../services/versionServices.js";
 
 export const getAll = async(req, res) => {
+    console.log("QUERY RECEBIDA:", req.query);
     try {
-        const { page = 1, limit, sort, order, ...filters } = req.query;
+        const { page = 1, limit, sort, order, search, ...filters } = req.query;
 
             /*
       filters agora contém QUALQUER filtro vindo da URL
@@ -21,6 +22,7 @@ export const getAll = async(req, res) => {
             limit: limit ? Number(limit) : null,
             sort,
             order,
+            search,
             filters
         }); // O filter passa tudo de forma dinamica
 
