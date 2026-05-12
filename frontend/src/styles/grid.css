@@ -1,0 +1,69 @@
+.ag-theme-quartz {
+  --ag-background-color: #ffffff;
+
+  --ag-header-background-color: #3E6B57;
+
+  --ag-header-foreground-color: white;
+
+  --ag-odd-row-background-color: #dbe7e2;
+
+  --ag-row-hover-color: #9cb7d1;
+
+  --ag-border-color: #4b6f5d;
+
+  --ag-font-size: 15px;
+
+  --ag-font-family: Arial, sans-serif;
+
+  --ag-row-height: 35px;
+
+  --ag-header-height: 40px;
+}
+
+/* Centralizar conteúdo */
+.ag-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cabeçalho */
+.ag-header-cell-label {
+  justify-content: center;
+  font-weight: bold;
+
+}
+
+/* Bordas suaves */
+.ag-root-wrapper {
+
+  overflow: hidden;
+  border: 1px solid #4b6f5d;
+}
+
+/* Linhas */
+.ag-row {
+  border-bottom: 1px solid #6c8a7b;
+}
+
+.ag-theme-quartz {
+  --ag-selected-row-background-color: #45596b;
+
+}
+
+.ag-header {
+  color: white;
+}
+
+.ag-header-cell-text {
+    font-size: 17px;
+  color: white;
+}
+
+.ag-row-selected .ag-cell {
+  color: white !important;
+}
+
+.ag-row-selected {
+  font-weight: bold;
+}
