@@ -1,0 +1,146 @@
+/* Fundo geral */
+.home-container {
+    
+  background-color: #efefef;
+  min-height: 100vh;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Barra superior */
+.home-header {
+  background-color: #2f5f4a;
+  color: white;
+  padding: 12px 18px;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+/* Grid principal */
+.home-grid {
+    margin-top: 10px;
+    padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1.7fr;
+  gap: 16px;
+}
+
+/* Coluna esquerda */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Linha busca */
+.search-row {
+  display: flex;
+  gap: 10px;
+}
+
+/* Campo busca */
+.search-input {
+  flex: 1;
+  height: 40px;
+  border: none;
+  background-color: #d9d9d9;
+  padding-left: 12px;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+/* Botão busca */
+.search-button {
+  width: 50px;
+  border: none;
+  background-color: #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Cards cinza */
+.gray-card {
+  background-color: #d9d9d9;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+/* Área terminais */
+.terminals-card {
+  height: 280px;
+}
+
+.version-card {
+  height: 336px;
+
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+}
+
+.version-header {
+  width: 100%;
+  height: 30px;
+  padding: 20px;
+    background-color: #5a8572;
+  display: flex;
+  align-items: center;
+}
+
+.version-title {
+  color: white;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+/* Botões das adquirentes */
+.version-buttons {
+  flex: 1;
+
+  display: flex;
+  gap: 20px;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.version-button {
+  flex: 1;
+  width: 350px;
+  height: 250px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2f5f4a;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.version-button:hover {
+  opacity: 0.9;
+}
+
+/* Dashboards inferiores */
+.bottom-dashboards {
+    padding-left: 20px;
+    padding-right: 20px;
+  
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.dashboard-card {
+  height: 350px;
+}
