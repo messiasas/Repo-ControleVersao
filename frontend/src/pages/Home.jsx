@@ -2,6 +2,9 @@ import "../styles/home.css";
 import Header from "../components/Header.jsx";
 import { useNavigate } from "react-router-dom";
 
+import paxImage from "../assets/pax_logo.jpg";
+import sumniImage from "../assets/sunmi_logo.jpg";
+
 function Home() {
   const navigate = useNavigate();
 
@@ -56,15 +59,26 @@ function Home() {
             <button
               className="version-button"
               onClick={() => navigate("/equipamentos")}
-            >
-              PAX
+
+              style={{
+                backgroundImage: `url(${paxImage})`
+              }}
+              >
+              <div className="button-overlay">
+                
+              </div>
             </button>
 
             {/* SUMNI */}
             <button
               className="version-button"
+              style={{
+                backgroundImage: `url(${sumniImage})`
+              }}
             >
-              SUMNI
+              <div className="button-overlay">
+                
+              </div>
             </button>
 
           </div>
