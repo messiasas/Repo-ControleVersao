@@ -1,23 +1,23 @@
 /* Fundo geral */
 .home-container {
     
-  background-color: #efefef;
+  background-color: #ffffff;
   min-height: 100vh;
   padding: 0px;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Barra superior */
+/* Barra superior
 .home-header {
   background-color: #2f5f4a;
-  color: white;
+  color: rgb(87, 33, 33);
   padding: 12px 18px;
   font-size: 28px;
   font-weight: bold;
   border-radius: 4px;
   margin-bottom: 12px;
-}
+} */
 
 /* Grid principal */
 .home-grid {
@@ -33,7 +33,7 @@
 .left-column {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 /* Linha busca */
@@ -64,9 +64,10 @@
 
 /* Cards cinza */
 .gray-card {
-  background-color: #d9d9d9;
-  border-radius: 4px;
+  background-color: #829e8c;
+  border-radius: 10px;
   display: flex;
+  flex-direction:column;
   justify-content: center;
   align-items: center;
   color: white;
@@ -76,7 +77,24 @@
 
 /* Área terminais */
 .terminals-card {
-  height: 280px;
+  height: 180px;
+}
+
+.dashboard-big-number{
+  font-size: 100px;
+}
+
+
+.card-search{
+    background-color: #d9d9d9;
+  height: 100px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 26px;
+  font-weight: bold;
 }
 
 .version-card {
@@ -92,7 +110,7 @@
   width: 100%;
   height: 30px;
   padding: 20px;
-    background-color: #acacac;
+    background-color: #5f7c69;
   display: flex;
   align-items: center;
 }
@@ -163,12 +181,139 @@
 .bottom-dashboards {
     padding-left: 20px;
     padding-right: 20px;
-  
-  display: grid;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
 }
 
 .dashboard-card {
-  height: 350px;
+  height: 300px;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 10px;
 }
+
+.dashboard-label {
+  font-size: 32px;
+
+  font-weight: bold;
+
+  text-align: center;
+
+  color: white;
+}
+
+
+
+
+
+
+
+
+
+
+.terminals-card {
+  position: relative;
+
+  overflow: hidden;
+
+  height: 180px;
+
+  border-radius: 18px;
+
+  background: #1e293b00;
+}
+
+.vertical-carousel {
+  width: 100%;
+  height: 100%;
+
+  position: relative;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: all 0.5s ease;
+}
+
+.arrow {
+  position: absolute;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  z-index: 10;
+
+  width: 40px;
+  height: 40px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(252, 252, 252, 0);
+
+  color: white;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.arrow:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+.down {
+  bottom: 0px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.customer-getnet {
+  background-color: #EC0000;
+}
+
+.customer-mercadopago {
+  background-color: #00BDFF;
+}
+
+.customer-pagseguro {
+  background-color: #00BC99;
+}
+
+.customer-safra {
+  background-color: #1E2044;
+}
+
+.customer-stone {
+  background-color: #00A867;
+}
+
+
+
