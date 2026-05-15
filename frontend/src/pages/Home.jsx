@@ -122,7 +122,7 @@ function Home() {
           </span>
 
           <span className="dashboard-label">
-            Modelos de terminais homologados
+            modelos de terminais homologados
           </span>
         </div>
 

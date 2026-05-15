@@ -59,7 +59,7 @@ function VerticalCarousel({ setCurrentCustomer }) {
 
 
 
-    }, 4000);
+    }, 3000);
 
     return () => clearInterval(interval);
 

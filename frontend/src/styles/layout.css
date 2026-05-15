@@ -9,7 +9,7 @@
 }
 
 .header-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
 }
 
@@ -33,7 +33,7 @@
   border: 1px solid #3E6B57;
   /*padding-left: 30px;
   padding-right: 30px;*/
-  /* overflow: auto;   */
+  overflow: auto;  
 }
 
 .table {
@@ -82,7 +82,7 @@
 
 .toolbar input {
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 8px; /*github*/
   border: 1px solid #ccc;
 }
 
