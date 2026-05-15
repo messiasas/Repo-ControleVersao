@@ -43,7 +43,7 @@ function Home() {
             />
 
             <button className="search-button">
-              🔍
+              Buscar
             </button>
           </div>
 
@@ -124,6 +124,7 @@ function Home() {
           <span className="dashboard-label">
             modelos de terminais homologados
           </span>
+          
         </div>
 
 
@@ -133,28 +134,29 @@ function Home() {
             dashboard-card
             customer-${currentCustomer?.nome}
         `}>
-          dashboard2
-        </div>
+          <span className="dashboard-string">
+            {currentCustomer?.fabricantes}
+          </span>
 
-
-        <div
-        className={`
-            gray-card
-            dashboard-card
-            customer-${currentCustomer?.nome}
-        `}>
-          dashboard2
-
-
+          <span className="dashboard-label">
+            fabricantes homologados
+          </span>
         </div>
 
         <div
-              className={`
+          className={`
           gray-card
           dashboard-card
           customer-${currentCustomer?.nome}
         `}>
-          dashboard3
+
+          <span className="dashboard-deploy">
+            {currentCustomer?.tecnologias}
+          </span>
+
+          <span className="dashboard-tecnologia">
+            plataformas
+          </span>
 
         </div>
 
