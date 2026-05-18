@@ -35,20 +35,29 @@ function PaxTable(){
 
     <Header />
 
+    <div className="top-navigation">
+
+      <button className="nav-button active">
+        Controle de versão
+      </button>
+
+      <button className="nav-button">
+        Suporte
+      </button>
+
+      <button className="nav-button">
+        Sobre
+      </button>
+    </div>
+
     <div className="toolbar">
 
       <input
-        placeholder="Digite sua busca..."
+        className="search-space"
+        placeholder="Busque por cliente"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-
-      <input
-        className="chaves"
-        placeholder="Quantidade de chaves"
-      />
-
-      <button>+ Filtros</button>
 
     </div>
 

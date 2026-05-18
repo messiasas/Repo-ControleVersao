@@ -30,10 +30,10 @@
   max-height: 600px;
   border-radius: 10px;
   flex: 1;
-  border: 1px solid #3E6B57;
+  border: 1px solid #45596b;
   /*padding-left: 30px;
   padding-right: 30px;*/
-  overflow: auto;  
+  /* overflow: auto;   */
 }
 
 .table {
@@ -87,8 +87,11 @@
 }
 
 .toolbar input:first-child {
-  width: 250px;
+  width: 350px;
   height: 40px;
+   
+   outline: none;
+   font-size: 19px;
 }
 
 .chaves {
@@ -111,4 +114,49 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - var(--header-height));
+}
+
+
+
+
+
+
+
+
+
+
+
+.top-navigation {
+  display: flex;
+  width: 100%;
+  gap: 0px;
+  margin-top: 0px;
+  
+}
+
+.nav-button {
+  flex: 1; /* divide igualmente */
+  height: 45px;
+  
+  border: 1px solid #ffffff; /* borda */
+
+  border-radius: 10px;
+
+  background-color: #5f7c69;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.nav-button:hover {
+  opacity: 0.85;
+}
+
+.nav-button.active {
+  background-color: #45596b;
 }

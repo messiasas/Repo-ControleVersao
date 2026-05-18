@@ -1,5 +1,5 @@
 import PaxTable from "./pages/PaxTable.jsx"
-import Home from "./pages/Home.jsx";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App(){
@@ -7,11 +7,13 @@ function App(){
       <BrowserRouter>
         <Routes>
           
-          <Route path="/" element={<Home />} />
+          {/* <PaxTable /> */}
 
-          <Route path="/equipamentos" element={<PaxTable />} />
+          <Route path="/" element={<PaxTable />} />
+
+          {/* <Route path="/equipamentos" element={<PaxTable />} />
           {/* <Route path="/chaves" element={<PaxTable />} />  */}
-        </Routes>
+        </Routes> 
       </BrowserRouter>
       )
 }
