@@ -1,6 +1,5 @@
 import "../styles/grid.css";
 import { AgGridReact } from 'ag-grid-react';
-import { useEffect, useRef } from "react";
 
 import {
   ModuleRegistry,
@@ -9,7 +8,7 @@ import {
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-function VersionGrid({ data, selectedRow, setSelectedRow, gridRef }) {
+function VersionGrid({ data= {data}, selectedRow={selectedRow},  setSelectedRow={setSelectedRow}, gridRef={gridRef} }) {
 
 
   const columns = [
