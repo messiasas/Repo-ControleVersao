@@ -3,11 +3,15 @@ import {useEffect, useState} from "react" // useState serve para guardar dados q
 import {getVersions} from "../services/api.js"
 import Header from "../components/Header.jsx";
 import VersionGrid from "../components/VersionGrid.jsx";
+import { useRef } from "react";
+import logo from "../assets/transire-img.png";
 
 function PaxTable(){
     const [data, setData] = useState([]);
     const [search, setSearch] = useState("");
+    const [selectedRow, setSelectedRow] = useState(null);
 
+    const gridRef = useRef();
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
         const fetchData = async () => {
@@ -59,13 +63,62 @@ function PaxTable(){
         onChange={(e) => setSearch(e.target.value)}
       />
 
+    <div className="toolbar-logo-container">
+      <img
+        src={logo}
+        alt="Logo"
+        className="toolbar-logo"
+       />
     </div>
+
+    </div>
+
+    <div className="bottom-toolbar">
+
+      <button
+        className={`apply-button ${selectedRow ? "active" : ""}`}
+        onClick={() => {
+          console.log("Aplicar visualização única");
+
+          if(selectedRow){
+            console.log("Linha atualmente selecionada:");
+            console.log(selectedRow);
+          }else{
+            console.log("Nenhuma linha selecionada");
+          }
+        }}
+      >
+        Aplicar visualização única
+      </button>
+
+      <button
+        className="clear-button"
+        onClick={() => {
+
+          gridRef.current.api.deselectAll();
+
+          setSelectedRow(null);
+
+          console.log("Seleções limpas");
+
+        }}
+      >
+        Limpar seleções
+      </button>
+
+    </div>
+
 
     <div className="dadcontainer">
 
       <div className="table-container">
 
-        <VersionGrid data={data} />
+        <VersionGrid
+          data={data}
+          selectedRow={selectedRow}
+          setSelectedRow={setSelectedRow}
+          gridRef={gridRef}
+        />
 
       </div>
 

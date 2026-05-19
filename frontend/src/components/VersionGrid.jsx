@@ -9,7 +9,8 @@ import {
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-function VersionGrid({ data }) {
+function VersionGrid({ data, selectedRow, setSelectedRow, gridRef }) {
+
 
   const columns = [
     { field: "empresa", filter: true },
@@ -42,10 +43,11 @@ function VersionGrid({ data }) {
       className="ag-theme-quartz"
       style={{ height: 600, width: '100%' }}>
         <AgGridReact
+        ref={gridRef}
         rowData={data}
         columnDefs={columns}
 
-        rowSelection="multiple"
+        rowSelection="single"
 
         pagination={true}
 
@@ -58,7 +60,36 @@ function VersionGrid({ data }) {
             flex: 1,
             minWidth: 160,
         }}
-        />
+
+        onRowClicked={(event) => {
+
+        const alreadySelected = (
+          selectedRow?.empresa === event.data.empresa
+        );
+
+        if(alreadySelected){
+
+          event.node.setSelected(false);
+
+          setSelectedRow(null);
+
+          console.log("Seleção removida");
+
+        }else{
+
+          event.node.setSelected(true);
+
+          setSelectedRow(event.data);
+
+          console.log("Linha selecionada:");
+          console.log(event.data);
+
+        }
+
+        }}>
+
+      </AgGridReact>
+      
     </div>
   );
 }

@@ -18,8 +18,8 @@
   max-width: 100%; 
   max-height: 600px;
   flex: 1;
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
   /* overflow: auto;  */
   /* background-color: #54f0a9; */
 }
@@ -72,42 +72,51 @@
   background-color: #bcd3c9;
 }
 
+
+
+
 .toolbar {
   display: flex;
-  gap: 12px;
   align-items: center;
-  padding: 30px;
+  justify-content: space-between;
+
+  padding: 15px;
   padding-left: 45px;
+  gap: 0px;
 }
 
 .toolbar input {
   padding: 8px 12px;
-  border-radius: 8px; /*github*/
+  border-radius: 8px;
   border: 1px solid #ccc;
 }
 
 .toolbar input:first-child {
+  width: 600px;
+  height: 40px;
+
+  outline: none;
+  font-size: 19px;
+}
+
+/* container da logo */
+.toolbar-logo-container{
   width: 350px;
-  height: 40px;
-   
-   outline: none;
-   font-size: 19px;
+  height: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
 }
 
-.chaves {
-  width: 200px;
-  height: 40px;
-}
+/* imagem */
+.toolbar-logo{
+  max-width: 100%;
+  max-height: 100%;
 
-.toolbar button {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-
-  background-color: #3E6B57;
-  color: white;
-
-  cursor: pointer;
+  object-fit: contain;
 }
 
 .content {
@@ -143,6 +152,7 @@
   border-radius: 10px;
 
   background-color: #5f7c69;
+  
   color: white;
 
   font-size: 15px;
@@ -158,5 +168,86 @@
 }
 
 .nav-button.active {
-  background-color: #45596b;
+  background-color: #394957;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.bottom-toolbar{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+
+  height: 75px;
+
+  background: white;
+  border-top: 1px solid #dcdcdc;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  padding: 0 25px;
+
+  z-index: 999;
+}
+
+.apply-button,
+.clear-button{
+  height: 45px;
+  padding: 0 22px;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.apply-button{
+  width: 700px;
+  background: #d3d3d1;
+  color: #212121;
+}
+
+/* quando existir seleção */
+.apply-button.active{
+  background: #394957;
+  color: white;
+}
+
+.apply-button:hover{
+  background: #e7e7e7;
+}
+/* quando existir seleção */
+.apply-button.active:hover{
+  background: #45596b;
+  color: white;
+}
+
+
+.clear-button{
+  width: 700px;
+  background: #d3d3d1;
+  color: #212121;
+}
+
+.clear-button:hover{
+  background: #e7e7e7;
 }
