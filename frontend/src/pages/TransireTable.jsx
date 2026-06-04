@@ -3,6 +3,7 @@ import {getVersions} from "../services/api.js"
 import Header from "../components/Header.jsx";
 import Filters from "../components/Filters.jsx"
 import Grid from "../components/Grid.jsx"
+import { useNavigate } from "react-router-dom";
 
 
 function TransireTable(){
@@ -27,6 +28,8 @@ function TransireTable(){
 
     console.log(data);
 
+     const navigate = useNavigate();
+
     return (
     <div className="app-container">
 
@@ -38,7 +41,10 @@ function TransireTable(){
           Controle de versão
         </button>
 
-        <button className="nav-button">
+        <button 
+          className="nav-button"
+          onClick={() => navigate("/login")}>
+        
           Suporte
         </button>
 
