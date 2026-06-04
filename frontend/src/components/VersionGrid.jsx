@@ -1,6 +1,5 @@
 import "../styles/grid.css";
 import { AgGridReact } from 'ag-grid-react';
-import { useEffect, useRef } from "react";
 
 import {
   ModuleRegistry,
@@ -9,7 +8,8 @@ import {
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-function VersionGrid({ data }) {
+function VersionGrid({ data= {data}, selectedRow={selectedRow},  setSelectedRow={setSelectedRow}, gridRef={gridRef} }) {
+
 
   const columns = [
     { field: "empresa", filter: true },
@@ -41,14 +41,40 @@ function VersionGrid({ data }) {
     <div
       className="ag-theme-quartz"
       style={{ height: 600, width: '100%' }}>
-        <AgGridReact
+
+      <AgGridReact
+
+        ref={gridRef}
         rowData={data}
+
+        localeText={{
+          contains: "Contém",
+          notContains: "Não contém",
+          equals: "Igual",
+          notEqual: "Diferente",
+          startsWith: "Começa com",
+          endsWith: "Termina com",
+          blank: "Vazio",
+          notBlank: "Preenchido",
+
+          filterOoo: "Filtrar...",
+          searchOoo: "Pesquisar...",
+
+          noRowsToShow: "Nenhum registro encontrado",
+
+          page: "Página",
+          more: "Mais",
+          to: "até",
+          of: "de",
+          next: "Próxima",
+          last: "Última",
+          first: "Primeira",
+          previous: "Anterior"
+        }}
+
         columnDefs={columns}
-
-        rowSelection="multiple"
-
+        rowSelection="single"
         pagination={true}
-
         animateRows={true}
 
         defaultColDef={{
@@ -57,8 +83,37 @@ function VersionGrid({ data }) {
             resizable: true,
             flex: 1,
             minWidth: 160,
-        }}
-        />
+        }} 
+
+        onRowClicked={(event) => {
+
+        const alreadySelected = (
+          selectedRow?.empresa === event.data.empresa
+        );
+
+        if(alreadySelected){
+
+          event.node.setSelected(false);
+
+          setSelectedRow(null);
+
+          console.log("Seleção removida");
+
+        }else{
+
+          event.node.setSelected(true);
+
+          setSelectedRow(event.data);
+
+          console.log("Linha selecionada:");
+          console.log(event.data);
+
+        }
+
+        }}>
+
+      </AgGridReact>
+      
     </div>
   );
 }
