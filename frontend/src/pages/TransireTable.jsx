@@ -58,15 +58,25 @@ function TransireTable(){
         <button
           className={`apply-button ${selectedRow ? "active" : ""}`}
           onClick={() => {
-            console.log("Aplicar visualização única");
+          console.log("Aplicar visualização única");
 
             if(selectedRow){
               console.log("Linha atualmente selecionada:");
               console.log(selectedRow);
+
+            // MVP soluction
+            localStorage.setItem(
+              "selectedVersion",
+              JSON.stringify(selectedRow)
+            );
+
+            window.open(
+              "/version-view",
+              "_blank"
+            );
             }else{
               console.log("Nenhuma linha selecionada");
             }
-
           }}>
           Aplicar visualização única
         </button>

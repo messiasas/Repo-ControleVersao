@@ -41,15 +41,40 @@ function VersionGrid({ data= {data}, selectedRow={selectedRow},  setSelectedRow=
     <div
       className="ag-theme-quartz"
       style={{ height: 600, width: '100%' }}>
-        <AgGridReact
+
+      <AgGridReact
+
         ref={gridRef}
         rowData={data}
+
+        localeText={{
+          contains: "Contém",
+          notContains: "Não contém",
+          equals: "Igual",
+          notEqual: "Diferente",
+          startsWith: "Começa com",
+          endsWith: "Termina com",
+          blank: "Vazio",
+          notBlank: "Preenchido",
+
+          filterOoo: "Filtrar...",
+          searchOoo: "Pesquisar...",
+
+          noRowsToShow: "Nenhum registro encontrado",
+
+          page: "Página",
+          more: "Mais",
+          to: "até",
+          of: "de",
+          next: "Próxima",
+          last: "Última",
+          first: "Primeira",
+          previous: "Anterior"
+        }}
+
         columnDefs={columns}
-
         rowSelection="single"
-
         pagination={true}
-
         animateRows={true}
 
         defaultColDef={{
@@ -58,7 +83,7 @@ function VersionGrid({ data= {data}, selectedRow={selectedRow},  setSelectedRow=
             resizable: true,
             flex: 1,
             minWidth: 160,
-        }}
+        }} 
 
         onRowClicked={(event) => {
 
