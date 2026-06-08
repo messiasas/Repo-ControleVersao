@@ -136,3 +136,46 @@ body {
         max-width: 300px;
     }
 }
+
+
+
+
+/* Campo resposável pelos botões superiores */
+.top-navigation-amazonas {
+  display: flex;
+  width: 100%;
+  gap: 0px;
+  margin-top: 0px;
+  
+}
+
+
+ /* botões superiores */
+.nav-button-amazonas {
+  flex: 1;
+  height: 45px;
+  border: 1px solid #ffffff;
+
+  border-radius: 10px;
+  background-color: #005C73;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+ /* botões superiores */
+.nav-button-amazonas:hover {
+  opacity: 0.85;
+}
+
+ /* botões superiores */
+.nav-button-amazonas.active {
+  background-color: #013947;
+}
+
+
+
+

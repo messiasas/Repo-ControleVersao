@@ -8,10 +8,23 @@
   padding: 0 var(--spacing);
 }
 
+.header-amazonas {
+  height: var(--header-height);
+  background-color: var(--color-primary-amazonas);
+  color: var(--color-text);
+
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing);
+}
+
 .header-title {
   font-size: 18px;
   font-weight: bold;
 }
+
+
+
 
 /* Campo resposável pelos botões superiores */
 .top-navigation {

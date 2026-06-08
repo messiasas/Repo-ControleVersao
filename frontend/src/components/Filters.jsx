@@ -3,31 +3,11 @@ import "../styles/filters.css";
 import {useEffect, useState} from "react"
 import {getVersions} from "../services/api.js"
 import logo from "../assets/transire-img.png";
+import logoAmazonas from "../assets/amazonas.png";
 import Grid from "../components/Grid.jsx"
 
 
 export default function Filters({ search, setSearch }) {
-
-    // const [search, setSearch] = useState("");
-    // const [data, setData] = useState([]);
-
-    // useEffect(() => {
-
-    //     const delayDebounce = setTimeout(() => {
-    //     const fetchData = async () => {
-    //     const res = await getVersions(search);
-
-    //     setData([...res.data]);
-    // };
-
-    // fetchData();
-    // }, 500);
-
-    // return () => clearTimeout(delayDebounce);
-    // }, [search]);
-
-    // console.log(data);
-
 
   return (
     <div className="toolbar">
@@ -44,6 +24,13 @@ export default function Filters({ search, setSearch }) {
                 src={logo}
                 alt="Logo"
                 className="toolbar-logo" />
+        </div>
+
+        <div className="toolbar-logo-container-amazonas">
+            <img
+                src={logo}
+                alt="logoAmazonas"
+                className="toolbar-logo-amazonas" />
         </div>
 
     </div>
