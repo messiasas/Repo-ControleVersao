@@ -13,112 +13,6 @@
   font-weight: bold;
 }
 
-
-
-/* 
-.dadcontainer{
-  width: 100%; 
-  max-width: 100%; 
-  max-height: 600px;
-  flex: 1;
-  padding-left: 30px;
-  padding-right: 30px;
-} 
-
-.table-container {
-  width: 100%; 
-  max-width: 100%; 
-  max-height: 600px;
-  border-radius: 10px;
-  flex: 1;
-  border: 1px solid #45596b;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  border: 1px solid #3E6B57;
-  padding: 12px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.table thead {
-  background-color: #2c3e50;
-  color: white;
-}
-
-.table thead th {
-  position: sticky;
-  top: 0;
-  background-color: #3E6B57;
-  color: white;
-  z-index: 2;
-}
-
-.table tbody tr:nth-child(odd) {
-  background-color: #e3f5ed;
-}
-
-.table tbody tr:nth-child(even) {
-  background-color: #bcd3c9;
-} */
-
-
-/* 
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 15px;
-  padding-left: 45px;
-  gap: 0px;
-}
-
-.toolbar input {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-.toolbar input:first-child {
-  width: 600px;
-  height: 40px;
-
-  outline: none;
-  font-size: 19px;
-}
-
-
-.toolbar-logo-container{
-  width: 350px;
-  height: auto;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  overflow: hidden;
-}
-
-
-.toolbar-logo{
-  max-width: 100%;
-  max-height: 100%;
-
-  object-fit: contain;
-} */
-
-
-
-
-
 /* Campo resposável pelos botões superiores */
 .top-navigation {
   display: flex;
@@ -151,10 +45,8 @@
 
  /* botões superiores */
 .nav-button.active {
-  background-color: #394957;
+  background-color: #3c5244;
 }
-
-
 
 
 .bottom-toolbar{

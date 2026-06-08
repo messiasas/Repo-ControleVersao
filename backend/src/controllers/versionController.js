@@ -5,18 +5,6 @@ export const getAll = async(req, res) => {
     try {
         const { page = 1, limit, sort, order, search, ...filters } = req.query;
 
-            /*
-      filters agora contém QUALQUER filtro vindo da URL
-
-      Exemplo:
-      GET /versions?empresa=XPTO&modelo=ABC
-
-      filters = {
-        empresa: "XPTO",
-        modelo: "ABC"
-      }
-    */
-
         const result = await service.getAll({
             page: Number(page),
             limit: limit ? Number(limit) : null,
