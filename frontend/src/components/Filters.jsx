@@ -26,13 +26,6 @@ export default function Filters({ search, setSearch }) {
                 className="toolbar-logo" />
         </div>
 
-        <div className="toolbar-logo-container-amazonas">
-            <img
-                src={logo}
-                alt="logoAmazonas"
-                className="toolbar-logo-amazonas" />
-        </div>
-
     </div>
 
   );

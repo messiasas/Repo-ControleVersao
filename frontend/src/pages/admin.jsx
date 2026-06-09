@@ -4,6 +4,9 @@ import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {getVersions} from "../services/api.js";
 
+import GridAmazonas from "../components/GridAmazonas.jsx"
+
+
 function Admin() {
 
     const [data, setData] = useState([]);
@@ -51,14 +54,47 @@ function Admin() {
         </button>
 
         </div>
-
         <FiltersAmazonas
         search={search}
         setSearch={setSearch}
         />
 
-      </div>
+      <GridAmazonas
+        data={data}
+        selectedRow={selectedRow}
+        setSelectedRow={setSelectedRow}
+      />
 
+      <div className="bottom-toolbar">
+
+        <button
+          className={`apply-button ${selectedRow ? "active" : ""}`}
+          onClick={() => {
+          console.log("Aplicar visualização única");
+
+            if(selectedRow){
+              console.log("Linha atualmente selecionada:");
+              console.log(selectedRow);
+
+            // MVP soluction
+            localStorage.setItem(
+              "selectedVersion",
+              JSON.stringify(selectedRow)
+            );
+
+            window.open(
+              "/version-view",
+              "_blank"
+            );
+            }else{
+              console.log("Nenhuma linha selecionada");
+            }
+          }}>
+          Aplicar visualização única
+        </button>
+
+      </div>
+    </div>
     )
 }
 
