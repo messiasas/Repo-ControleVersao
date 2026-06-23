@@ -23,4 +23,14 @@ export const getAll = async(req, res) => {
 export const create = async (req, res) => {
     const data = await service.create(req.body, req.user.id);
     res.status(201).json(data);
-}
+};
+
+export const update = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = await service.update(id, req.body, req.user.id);
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

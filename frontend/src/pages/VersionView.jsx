@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../styles/versionView.css";
+import "../styles/VersionView.css";
 
 function VersionView() {
 

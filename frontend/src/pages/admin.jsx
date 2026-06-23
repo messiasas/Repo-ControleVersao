@@ -1,68 +1,52 @@
-import HeaderAmazonas from "../components/HeaderAmazonas.jsx";
-import FiltersAmazonas from "../components/FiltersAmazonas.jsx";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {getVersions} from "../services/api.js";
-
-import GridAmazonas from "../components/GridAmazonas.jsx"
-
+import { getVersions } from "../services/api.js";
+import Header from "../components/Header.jsx";
+import Filters from "../components/Filters.jsx";
+import Grid from "../components/Grid.jsx";
+import NewPackageModal from "../components/NewPackageModal.jsx";
 
 function Admin() {
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [refresh, setRefresh] = useState(0);
+  const navigate = useNavigate();
 
-    const [data, setData] = useState([]);
-    const [search, setSearch] = useState("");
-    const [selectedRow, setSelectedRow] = useState(null);
-
-
-    useEffect(() => {
-
-        const delayDebounce = setTimeout(() => {
-        const fetchData = async () => {
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      const fetchData = async () => {
         const res = await getVersions(search);
-
         setData([...res.data]);
-    };
-
-    fetchData();
+      };
+      fetchData();
     }, 500);
-
     return () => clearTimeout(delayDebounce);
-    }, [search]);
+  }, [search, refresh]);
 
-    console.log(data);
+  function handlePackageSuccess() {
+    setShowModal(false);
+    setRefresh((r) => r + 1);
+  }
 
-    const navigate = useNavigate();
+  return (
+    <div className="app-container">
+      <Header theme="amazonas" />
 
-    return(
-        <div className="app-container">
-        <HeaderAmazonas />
+      <div className="top-navigation-amazonas">
+        <button className="nav-button-amazonas active">Controle de versão</button>
+        <button className="nav-button-amazonas">Adicionar usuário</button>
+        <button className="nav-button-amazonas">Histórico</button>
+      </div>
 
-        <div className="top-navigation-amazonas">
+      <Filters search={search} setSearch={setSearch} theme="amazonas" />
 
-        <button className="nav-button-amazonas active">
-          Controle de versão
-        </button>
-
-        <button 
-          className="nav-button-amazonas">
-
-          Adicionar usuário
-        </button>
-
-        <button className="nav-button-amazonas">
-          Histórico
-        </button>
-
-        </div>
-        <FiltersAmazonas
-        search={search}
-        setSearch={setSearch}
-        />
-
-      <GridAmazonas
+      <Grid
         data={data}
         selectedRow={selectedRow}
         setSelectedRow={setSelectedRow}
+        theme="amazonas"
       />
 
       <div className="bottom-toolbar">
@@ -70,32 +54,40 @@ function Admin() {
         <button
           className={`apply-button ${selectedRow ? "active" : ""}`}
           onClick={() => {
-          console.log("Aplicar visualização única");
-
-            if(selectedRow){
-              console.log("Linha atualmente selecionada:");
-              console.log(selectedRow);
-
-            // MVP soluction
-            localStorage.setItem(
-              "selectedVersion",
-              JSON.stringify(selectedRow)
-            );
-
-            window.open(
-              "/version-view",
-              "_blank"
-            );
-            }else{
-              console.log("Nenhuma linha selecionada");
+            if (selectedRow) {
+              localStorage.setItem("selectedVersion", JSON.stringify(selectedRow));
+              window.open("/version-view", "_blank");
             }
           }}>
           Aplicar visualização única
         </button>
 
+
+        <button className="new-package-button" onClick={() => setShowModal(true)}>
+          Novo pacote
+        </button>
+
+        <button
+          className={`settings-button ${selectedRow ? "active" : ""}`}
+          disabled={!selectedRow}
+          onClick={() => {
+            if (selectedRow) {
+              localStorage.setItem("editVersion", JSON.stringify(selectedRow));
+              window.open("/edit-version", "_blank");
+            }
+          }}>
+          Configurações
+        </button>
       </div>
+
+      {showModal && (
+        <NewPackageModal
+          onClose={() => setShowModal(false)}
+          onSuccess={handlePackageSuccess}
+        />
+      )}
     </div>
-    )
+  );
 }
 
 export default Admin;

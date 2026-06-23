@@ -92,8 +92,16 @@ export const getAll = async({page, limit, sort, order, search, filters}) => {
 
 export const create = async(data, userId) => {
     const record = await repo.create(data);
-    
+
     await createLog(userId, "CREATE", record.id);
 
     return record;
+};
+
+export const update = async (id, data, userId) => {
+    await repo.update(id, data);
+
+    await createLog(userId, "UPDATE", id);
+
+    return repo.findById(id);
 };

@@ -1,54 +1,45 @@
 .ag-theme-quartz {
   --ag-background-color: #ffffff;
-
   --ag-header-background-color: #5f7c69;
-
   --ag-header-foreground-color: white;
-
   --ag-odd-row-background-color: #dbe7e2;
-
   --ag-row-hover-color: #9cb7d1;
-
   --ag-border-color: #4b6f5d;
-
   --ag-font-size: 15px;
-
   --ag-font-family: Arial, sans-serif;
-
   --ag-row-height: 35px;
-
   --ag-header-height: 40px;
+  --ag-selected-row-background-color: #45596b;
 }
 
-/* Centralizar conteúdo */
+.ag-theme-quartz-amazonas {
+  --ag-header-background-color: #005C73;
+  --ag-header-foreground-color: white;
+  --ag-border-color: #e0e0e0;
+  --ag-row-border-color: #005C73;
+  --ag-odd-row-background-color: #cedbdf;
+  --ag-row-hover-color: #d7eaf0;
+  --ag-selected-row-background-color: #005C73;
+}
+
 .ag-cell {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Cabeçalho */
 .ag-header-cell-label {
   justify-content: center;
   font-weight: bold;
-
 }
 
-/* Bordas suaves */
 .ag-root-wrapper {
-
   overflow: hidden;
   border: 1px solid #4b6f5d;
 }
 
-/* Linhas */
 .ag-row {
   border-bottom: 1px solid #6c8a7b;
-}
-
-.ag-theme-quartz {
-  --ag-selected-row-background-color: #45596b;
-
 }
 
 .ag-header {
@@ -56,7 +47,7 @@
 }
 
 .ag-header-cell-text {
-    font-size: 17px;
+  font-size: 17px;
   color: white;
 }
 
@@ -68,14 +59,9 @@
   font-weight: bold;
 }
 
-
-
-
-
-/* Customizações de tabela*/
-.dadcontainer{
-  width: 100%; 
-  max-width: 100%; 
+.dadcontainer {
+  width: 100%;
+  max-width: 100%;
   max-height: 600px;
   flex: 1;
   padding-left: 30px;
@@ -83,44 +69,10 @@
 }
 
 .table-container {
-  width: 100%; 
-  max-width: 100%; 
+  width: 100%;
+  max-width: 100%;
   max-height: 600px;
   border-radius: 10px;
   flex: 1;
   border: 1px solid #5f7c69;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  border: 1px solid #3E6B57;
-  padding: 12px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.table thead {
-  background-color: #5f7c69;
-  color: white;
-}
-
-.table thead th {
-  position: sticky;
-  top: 0;
-  background-color: #3E6B57;
-  color: white;
-  z-index: 2;
-}
-
-.table tbody tr:nth-child(odd) {
-  background-color: #e3f5ed;
-}
-
-.table tbody tr:nth-child(even) {
-  background-color: #bcd3c9;
 }

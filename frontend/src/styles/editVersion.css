@@ -1,0 +1,160 @@
+.edit-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f4f6f9;
+}
+
+.edit-header {
+  height: 50px;
+  background: #005C73;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  flex-shrink: 0;
+}
+
+.edit-header-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.edit-header-subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.edit-body {
+  flex: 1;
+  padding: 32px;
+  padding-bottom: 100px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.edit-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+  z-index: 100;
+}
+
+.edit-save-button {
+  width: 100%;
+  max-width: 600px;
+  height: 46px;
+  border: none;
+  border-radius: 10px;
+  background: #005C73;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-save-button:hover {
+  background: #004a5e;
+}
+
+.confirm-modal {
+  background: white;
+  border-radius: 12px;
+  width: 420px;
+  max-width: 95vw;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.confirm-modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+}
+
+.confirm-modal-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  text-align: center;
+  margin-top: -8px;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.confirm-cancel {
+  flex: 1;
+  height: 44px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #374151;
+  transition: background 0.2s;
+}
+
+.confirm-cancel:hover {
+  background: #f3f4f6;
+}
+
+.confirm-submit {
+  flex: 1;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: #005C73;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.confirm-submit:hover {
+  background: #004a5e;
+}
+
+.confirm-submit:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.confirm-error {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #dc2626;
+  font-size: 14px;
+  text-align: center;
+}
+
+.confirm-success {
+  background: #d1fae5;
+  border: 1px solid #6ee7b7;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #065f46;
+  font-size: 14px;
+  text-align: center;
+}

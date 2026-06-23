@@ -59,7 +59,7 @@ function TransireTable(){
         setSearch={setSearch}
       />
 
-      <div className="bottom-toolbar">
+      <div className="bottom-toolbar bottom-toolbar--single">
 
         <button
           className={`apply-button ${selectedRow ? "active" : ""}`}

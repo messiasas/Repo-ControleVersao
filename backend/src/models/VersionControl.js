@@ -17,9 +17,9 @@ const VersionControl = sequelize.define("VersionControl",
 
     versao_wifi: DataTypes.STRING,
     versao_gprs: DataTypes.STRING,
-    possui_logo: DataTypes.BOOLEAN,
+    possui_logo: DataTypes.STRING,
 
-    chaves: DataTypes.BOOLEAN,
+    chaves: DataTypes.STRING,
     qtd_chaves: DataTypes.INTEGER,
     configurador: DataTypes.STRING,
     

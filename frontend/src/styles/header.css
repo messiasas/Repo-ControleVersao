@@ -23,9 +23,6 @@
   font-weight: bold;
 }
 
-
-
-
 /* Campo resposável pelos botões superiores */
 .top-navigation {
   display: flex;
@@ -61,6 +58,11 @@
   background-color: #3c5244;
 }
 
+
+.bottom-toolbar--single .apply-button {
+  flex: none;
+  width: 500px;
+}
 
 .bottom-toolbar{
   position: fixed;
@@ -101,14 +103,14 @@
 }
 
 .apply-button{
-  width: 700px;
+  flex: 1;
   background: #d3d3d1;
   color: #212121;
 }
 
 /* quando existir seleção */
 .apply-button.active{
-  background: #394957;
+  background: #45596b;
   color: white;
 }
 
@@ -117,17 +119,62 @@
 }
 /* quando existir seleção */
 .apply-button.active:hover{
-  background: #45596b;
+  background: #364552;
   color: white;
 }
 
 
 .clear-button{
-  width: 700px;
+  flex: 1;
   background: #d3d3d1;
   color: #212121;
 }
 
 .clear-button:hover{
   background: #e7e7e7;
+}
+
+.new-package-button {
+  flex: 1;
+  height: 45px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: #58a788;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.new-package-button:hover {
+  background: #4c8b72;
+}
+
+.settings-button {
+  flex: 1;
+  height: 45px;
+  padding: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #d3d3d1;
+  color: #212121;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: not-allowed;
+  transition: background 0.2s;
+  opacity: 0.9;
+}
+
+.settings-button.active {
+  background: #5e7ab1;
+  color: white;
+  cursor: pointer;
+  opacity: 1;
+  border: none;
+}
+
+.settings-button.active:hover {
+  background: #566fa1;
 }

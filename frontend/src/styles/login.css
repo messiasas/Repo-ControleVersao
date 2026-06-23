@@ -122,6 +122,22 @@ body {
     background-color: #4b6654;
 }
 
+.login-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.login-error {
+    color: #ffe0e0;
+    font-size: 14px;
+    text-align: center;
+    background: rgba(220, 38, 38, 0.25);
+    border-radius: 6px;
+    padding: 8px 14px;
+    width: 100%;
+    max-width: 380px;
+}
+
 @media (max-width: 768px) {
 
     .login-container {
