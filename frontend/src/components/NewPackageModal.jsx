@@ -9,8 +9,6 @@ const INITIAL_FORM = {
   versao_so: "",
   firmware: "",
   puk_crc: "",
-  aplicacao: "",
-  versao_app: "",
   versao_bt: "",
   versao_wifi: "",
   versao_gprs: "",
@@ -22,14 +20,31 @@ const INITIAL_FORM = {
   tipo_chaves: "",
 };
 
+const EMPTY_APP = { nome: "", versao: "" };
+
 export default function NewPackageModal({ onClose, onSuccess }) {
   const [form, setForm] = useState(INITIAL_FORM);
+  const [aplicacoes, setAplicacoes] = useState([{ ...EMPTY_APP }]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleAppChange(index, field, value) {
+    setAplicacoes((prev) =>
+      prev.map((a, i) => (i === index ? { ...a, [field]: value } : a))
+    );
+  }
+
+  function addApp() {
+    setAplicacoes((prev) => [...prev, { ...EMPTY_APP }]);
+  }
+
+  function removeApp(index) {
+    setAplicacoes((prev) => prev.filter((_, i) => i !== index));
   }
 
   async function handleSubmit() {
@@ -43,6 +58,7 @@ export default function NewPackageModal({ onClose, onSuccess }) {
       const res = await createVersion({
         ...form,
         qtd_chaves: form.qtd_chaves !== "" ? Number(form.qtd_chaves) : null,
+        aplicacoes: aplicacoes.filter((a) => a.nome || a.versao),
       });
       if (res.id) {
         onSuccess();
@@ -133,15 +149,46 @@ export default function NewPackageModal({ onClose, onSuccess }) {
               </select>
             </div>
 
-            <div className="form-section-title">Aplicação</div>
+            <div className="form-section-title">Aplicações</div>
 
-            <div className="form-group">
-              <label>Nome do app</label>
-              <input className="form-input" name="aplicacao" value={form.aplicacao} onChange={handleChange} placeholder="Nome da aplicação" />
-            </div>
-            <div className="form-group">
-              <label>Versão app</label>
-              <input className="form-input" name="versao_app" value={form.versao_app} onChange={handleChange} placeholder="Ex: 3.4.0" />
+            <div className="aplicacoes-container">
+              {aplicacoes.map((app, i) => (
+                <div key={i} className="aplicacao-item">
+                  <div className="aplicacao-fields">
+                    <div className="form-group">
+                      <label>Nome do app</label>
+                      <input
+                        className="form-input"
+                        value={app.nome}
+                        onChange={(e) => handleAppChange(i, "nome", e.target.value)}
+                        placeholder="Nome da aplicação"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Versão app</label>
+                      <input
+                        className="form-input"
+                        value={app.versao}
+                        onChange={(e) => handleAppChange(i, "versao", e.target.value)}
+                        placeholder="Ex: 3.4.0"
+                      />
+                    </div>
+                  </div>
+                  {aplicacoes.length > 1 && (
+                    <button
+                      type="button"
+                      className="remove-app-btn"
+                      onClick={() => removeApp(i)}
+                      title="Remover aplicação"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button type="button" className="add-app-btn" onClick={addApp}>
+                + Adicionar aplicação
+              </button>
             </div>
 
             {error && <div className="modal-error">{error}</div>}

@@ -63,7 +63,7 @@ function VersionView() {
 
         <div className="info-card">
 
-            <h2>Sistema</h2>
+            <h2>Info. versões</h2>
 
             <div className="info-row">
                 <span className="info-label">Versão SO</span>
@@ -76,8 +76,14 @@ function VersionView() {
             </div>
 
             <div className="info-row">
-                <span className="info-label">Aplicação</span>
-                <span className="info-value">{versionData?.aplicacao}</span>
+                <span className="info-label">Aplicações</span>
+                <span className="info-value">
+                  {versionData?.aplicacoes?.length > 0
+                    ? versionData.aplicacoes.map((a, i) => (
+                        <div key={i}>{a.nome}{a.versao ? ` — v${a.versao}` : ""}</div>
+                      ))
+                    : "—"}
+                </span>
             </div>
 
             <div className="info-row">
@@ -89,7 +95,7 @@ function VersionView() {
 
         <div className="info-card">
 
-            <h2>Comunicação</h2>
+            <h2>Conectividade</h2>
 
             <div className="info-row">
                 <span className="info-label">Bluetooth</span>
@@ -110,7 +116,7 @@ function VersionView() {
 
         <div className="info-card">
 
-            <h2>Segurança</h2>
+            <h2>Info. chaves</h2>
 
             <div className="info-row">
                 <span className="info-label">Chaves</span>
@@ -145,6 +151,26 @@ function VersionView() {
         <div className="info-card">
 
             <h2>Personalização</h2>
+
+            <div className="info-row">
+                <span className="info-label">Possui Logo</span>
+                <span className="info-value">
+                    {versionData?.possui_logo ? "Sim" : "Não"}
+                </span>
+            </div>
+
+            <div className="info-row">
+                <span className="info-label">Fonte</span>
+                <span className="info-value">
+                    {versionData?.fonte}
+                </span>
+            </div>
+
+        </div>
+    
+        <div className="info-card">
+
+            <h2>Histórico</h2>
 
             <div className="info-row">
                 <span className="info-label">Possui Logo</span>

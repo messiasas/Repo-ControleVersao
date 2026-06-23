@@ -76,3 +76,24 @@
   flex: 1;
   border: 1px solid #5f7c69;
 }
+
+.ver-apps-btn {
+  padding: 3px 14px;
+  border: 1px solid #005C73;
+  border-radius: 6px;
+  background: #005C73;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ver-apps-btn:hover {
+  background: #004a5e;
+}
+
+.ag-row-selected .ver-apps-btn {
+  border-color: white;
+  background: transparent;
+}

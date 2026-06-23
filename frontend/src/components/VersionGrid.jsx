@@ -4,6 +4,25 @@ import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+function AppNomeCell({ data }) {
+  const apps = data?.aplicacoes;
+
+  if (!apps || apps.length === 0) return <span>—</span>;
+
+  if (apps.length === 1) return <span>{apps[0].nome || "—"}</span>;
+
+  function handleVer() {
+    localStorage.setItem("selectedVersion", JSON.stringify(data));
+    window.open("/version-view", "_blank");
+  }
+
+  return (
+    <button className="ver-apps-btn" onClick={handleVer}>
+      Ver ({apps.length})
+    </button>
+  );
+}
+
 const columns = [
   { field: "empresa",    rowGroup: true, hide: true },
   { field: "modelo",     rowGroup: true, hide: true },
@@ -11,8 +30,12 @@ const columns = [
   { field: "versao_so",  headerName: "Versão SO",    filter: true },
   { field: "firmware",                                filter: true },
   { field: "puk_crc",    headerName: "PUK/CRC",      filter: true },
-  { field: "aplicacao",  headerName: "Aplicação",    filter: true },
-  { field: "versao_app", headerName: "Versão app",   filter: true },
+  {
+    field: "aplicacoes",
+    headerName: "Aplicação",
+    cellRenderer: AppNomeCell,
+    valueGetter: (p) => (p.data?.aplicacoes || []).map((a) => a.nome).filter(Boolean).join(", "),
+  },
   { field: "versao_bt",  headerName: "Versão BT",    filter: true },
   { field: "versao_wifi", headerName: "Wi-Fi",       filter: true },
   { field: "versao_gprs", headerName: "GPRS",        filter: true },
