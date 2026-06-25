@@ -5,16 +5,39 @@ import Header from "../components/Header.jsx";
 import Filters from "../components/Filters.jsx";
 import Grid from "../components/Grid.jsx";
 import NewPackageModal from "../components/NewPackageModal.jsx";
+import Historico from "./Historico.jsx";
+import HistoricoDetalhe from "./HistoricoDetalhe.jsx";
+import AddUserModal from "../components/AddUserModal.jsx";
 
 function Admin() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showAddUser, setShowAddUser] = useState(false);
   const [refresh, setRefresh] = useState(0);
+  const [view, setView] = useState("versoes"); // "versoes" | "historico" | "historico-detalhe"
+  const [selectedHistorico, setSelectedHistorico] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const handlePopState = (e) => {
+      const newView = e.state?.view || "versoes";
+      setView(newView);
+      if (e.state?.data) setSelectedHistorico(e.state.data);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  function navigateTo(newView, data = null) {
+    window.history.pushState({ view: newView, data }, "");
+    setView(newView);
+    if (data) setSelectedHistorico(data);
+  }
+
+  useEffect(() => {
+    if (view !== "versoes") return;
     const delayDebounce = setTimeout(() => {
       const fetchData = async () => {
         const res = await getVersions(search);
@@ -23,11 +46,15 @@ function Admin() {
       fetchData();
     }, 500);
     return () => clearTimeout(delayDebounce);
-  }, [search, refresh]);
+  }, [search, refresh, view]);
 
   function handlePackageSuccess() {
     setShowModal(false);
     setRefresh((r) => r + 1);
+  }
+
+  function handleSelectHistorico(pkg) {
+    navigateTo("historico-detalhe", pkg);
   }
 
   return (
@@ -35,56 +62,82 @@ function Admin() {
       <Header theme="amazonas" />
 
       <div className="top-navigation-amazonas">
-        <button className="nav-button-amazonas active">Controle de versão</button>
-        <button className="nav-button-amazonas">Adicionar usuário</button>
-        <button className="nav-button-amazonas">Histórico</button>
+        <button
+          className={`nav-button-amazonas ${view === "versoes" ? "active" : ""}`}
+          onClick={() => navigateTo("versoes")}
+        >
+          Controle de versão
+        </button>
+        <button className="nav-button-amazonas" onClick={() => setShowAddUser(true)}>Adicionar usuário</button>
+        <button
+          className={`nav-button-amazonas ${view === "historico" || view === "historico-detalhe" ? "active" : ""}`}
+          onClick={() => navigateTo("historico")}
+        >
+          Histórico
+        </button>
       </div>
 
-      <Filters search={search} setSearch={setSearch} theme="amazonas" />
+      {view === "versoes" && (
+        <>
+          <Filters search={search} setSearch={setSearch} theme="amazonas" />
 
-      <Grid
-        data={data}
-        selectedRow={selectedRow}
-        setSelectedRow={setSelectedRow}
-        theme="amazonas"
-      />
+          <Grid
+            data={data}
+            selectedRow={selectedRow}
+            setSelectedRow={setSelectedRow}
+            theme="amazonas"
+          />
 
-      <div className="bottom-toolbar">
+          <div className="bottom-toolbar">
+            <button
+              className={`apply-button ${selectedRow ? "active" : ""}`}
+              onClick={() => {
+                if (selectedRow) {
+                  localStorage.setItem("selectedVersion", JSON.stringify(selectedRow));
+                  window.open("/version-view", "_blank");
+                }
+              }}
+            >
+              Aplicar visualização única
+            </button>
 
-        <button
-          className={`apply-button ${selectedRow ? "active" : ""}`}
-          onClick={() => {
-            if (selectedRow) {
-              localStorage.setItem("selectedVersion", JSON.stringify(selectedRow));
-              window.open("/version-view", "_blank");
-            }
-          }}>
-          Aplicar visualização única
-        </button>
+            <button className="new-package-button" onClick={() => setShowModal(true)}>
+              Novo pacote
+            </button>
 
+            <button
+              className={`settings-button ${selectedRow ? "active" : ""}`}
+              disabled={!selectedRow}
+              onClick={() => {
+                if (selectedRow) {
+                  localStorage.setItem("editVersion", JSON.stringify(selectedRow));
+                  window.open("/edit-version", "_blank");
+                }
+              }}
+            >
+              Configurações
+            </button>
+          </div>
+        </>
+      )}
 
-        <button className="new-package-button" onClick={() => setShowModal(true)}>
-          Novo pacote
-        </button>
+      {view === "historico" && (
+        <Historico onSelectPackage={handleSelectHistorico} />
+      )}
 
-        <button
-          className={`settings-button ${selectedRow ? "active" : ""}`}
-          disabled={!selectedRow}
-          onClick={() => {
-            if (selectedRow) {
-              localStorage.setItem("editVersion", JSON.stringify(selectedRow));
-              window.open("/edit-version", "_blank");
-            }
-          }}>
-          Configurações
-        </button>
-      </div>
+      {view === "historico-detalhe" && selectedHistorico && (
+        <HistoricoDetalhe pkg={selectedHistorico} />
+      )}
 
       {showModal && (
         <NewPackageModal
           onClose={() => setShowModal(false)}
           onSuccess={handlePackageSuccess}
         />
+      )}
+
+      {showAddUser && (
+        <AddUserModal onClose={() => setShowAddUser(false)} />
       )}
     </div>
   );

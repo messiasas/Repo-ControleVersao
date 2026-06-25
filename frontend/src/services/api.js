@@ -28,6 +28,44 @@ export const updateVersion = async (id, data) => {
   return response.json();
 };
 
+export const createUser = async (email, password) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/users`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  return response.json();
+};
+
+export const deleteVersion = async (id) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/versions/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.json();
+};
+
+export const getLogsPackages = async () => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/logs`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.json();
+};
+
+export const getVersionHistory = async (id) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/logs/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.json();
+};
+
 export const createVersion = async (data) => {
   const token = localStorage.getItem("token");
   const response = await fetch(`${BASE_URL}/versions`, {

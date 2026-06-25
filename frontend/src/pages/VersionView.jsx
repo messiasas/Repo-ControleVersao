@@ -75,15 +75,28 @@ function VersionView() {
                 <span className="info-value">{versionData?.firmware}</span>
             </div>
 
-            <div className="info-row">
+            <div className="apps-section">
                 <span className="info-label">Aplicações</span>
-                <span className="info-value">
-                  {versionData?.aplicacoes?.length > 0
-                    ? versionData.aplicacoes.map((a, i) => (
-                        <div key={i}>{a.nome}{a.versao ? ` — v${a.versao}` : ""}</div>
-                      ))
-                    : "—"}
-                </span>
+                {versionData?.aplicacoes?.length > 0 ? (
+                  <table className="apps-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Versão</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {versionData.aplicacoes.map((a, i) => (
+                        <tr key={i}>
+                          <td>{i + 1}</td>
+                          <td>{a.nome || "—"}</td>
+                          <td>{a.versao || "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : <span className="info-value">—</span>}
             </div>
 
             <div className="info-row">

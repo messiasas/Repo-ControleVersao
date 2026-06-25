@@ -4,7 +4,8 @@ import sequelize from "../config/database.js";
 const Log = sequelize.define("Log", {
   user_id: DataTypes.INTEGER,
   action: DataTypes.STRING,
-  record_id: DataTypes.INTEGER
+  record_id: DataTypes.INTEGER,
+  details: DataTypes.TEXT,
 });
 
 export default Log;

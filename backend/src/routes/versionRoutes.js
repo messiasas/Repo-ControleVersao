@@ -10,5 +10,6 @@ const router = express.Router();
 router.get("/", controller.getAll);
 router.post("/", validate(versionSchema), authMiddleware, isAdmin, controller.create);
 router.put("/:id", validate(versionUpdateSchema), authMiddleware, isAdmin, controller.update);
+router.delete("/:id", authMiddleware, isAdmin, controller.remove);
 
 export default router;

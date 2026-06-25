@@ -10,6 +10,8 @@
   --ag-row-height: 35px;
   --ag-header-height: 40px;
   --ag-selected-row-background-color: #45596b;
+  --ag-column-border: 1px solid #4b6f5d;
+  --ag-header-column-border: 1px solid #3d5c4a;
 }
 
 .ag-theme-quartz-amazonas {
@@ -20,6 +22,8 @@
   --ag-odd-row-background-color: #cedbdf;
   --ag-row-hover-color: #d7eaf0;
   --ag-selected-row-background-color: #005C73;
+  --ag-column-border: 1px solid #005C73;
+  --ag-header-column-border: 1px solid #004a5e;
 }
 
 .ag-cell {

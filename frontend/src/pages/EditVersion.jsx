@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { login, updateVersion } from "../services/api.js";
+import { login, updateVersion, deleteVersion } from "../services/api.js";
 import "../styles/editVersion.css";
 import "../styles/modal.css";
 
@@ -14,6 +14,8 @@ export default function EditVersion() {
   const [confirmError, setConfirmError] = useState("");
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [deleteInput, setDeleteInput] = useState("");
+  const [pendingAction, setPendingAction] = useState(null); // "save" | "delete"
 
   useEffect(() => {
     const raw = localStorage.getItem("editVersion");
@@ -62,6 +64,18 @@ export default function EditVersion() {
         return;
       }
       localStorage.setItem("token", authRes.token);
+
+      if (pendingAction === "delete") {
+        const res = await deleteVersion(form.id);
+        if (res.message) {
+          setShowConfirm(false);
+          localStorage.removeItem("editVersion");
+          window.close();
+        } else {
+          setConfirmError(res?.error || "Erro ao excluir pacote.");
+        }
+        return;
+      }
 
       const { id, createdAt, updatedAt, aplicacoes: _a, ...payload } = form;
       const res = await updateVersion(id, {
@@ -230,11 +244,28 @@ export default function EditVersion() {
             </button>
           </div>
 
+          <div className="form-group full-width delete-zone">
+            <label>Para excluir este pacote, digite o nome da empresa: <strong>{form.empresa}</strong></label>
+            <input
+              className="form-input delete-input"
+              placeholder={`Digite "${form.empresa}" para confirmar`}
+              value={deleteInput}
+              onChange={(e) => setDeleteInput(e.target.value)}
+            />
+          </div>
+
         </div>
       </div>
 
       <div className="edit-footer">
-        <button className="edit-save-button" onClick={() => { setShowConfirm(true); setConfirmError(""); }}>
+        <button
+          className="delete-package-button"
+          disabled={deleteInput !== form.empresa}
+          onClick={() => { setPendingAction("delete"); setShowConfirm(true); setConfirmError(""); }}
+        >
+          Excluir pacote
+        </button>
+        <button className="edit-save-button" onClick={() => { setPendingAction("save"); setShowConfirm(true); setConfirmError(""); }}>
           Salvar alterações
         </button>
       </div>
@@ -243,7 +274,11 @@ export default function EditVersion() {
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setShowConfirm(false)}>
           <div className="confirm-modal">
             <span className="confirm-modal-title">Confirme sua identidade</span>
-            <span className="confirm-modal-subtitle">Para salvar as alterações, insira suas credenciais de administrador.</span>
+            <span className="confirm-modal-subtitle">
+              {pendingAction === "delete"
+                ? "Para excluir o pacote, insira suas credenciais de administrador."
+                : "Para salvar as alterações, insira suas credenciais de administrador."}
+            </span>
 
             <input
               className="form-input"

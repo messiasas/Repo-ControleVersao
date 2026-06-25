@@ -4,6 +4,8 @@ import helmet from "helmet"; // For securit against web attack
 
 import versionRoutes from "./routes/versionRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import logRoutes from "./routes/logRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -16,5 +18,7 @@ app.use(helmet());
 
 app.use("/versions", versionRoutes); // tudo que começa com /version vai pra esse setor
 app.use("/auth", authRoutes);
+app.use("/logs", logRoutes);
+app.use("/users", userRoutes);
 
 export default app;

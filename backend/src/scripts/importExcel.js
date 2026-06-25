@@ -1,114 +1,120 @@
-import pkg from 'xlsx';
-const { readFile, utils } = pkg;
+import XLSX from "xlsx";
 import path from "path";
 import { fileURLToPath } from "url";
 import sequelize from "../config/database.js";
-import VersionControl from "../models/VersionControl.js";
+import { VersionControl, AplicacaoVersao } from "../models/index.js";
 
-const COLUMN_MAP = {
-  "Empresa":                  "empresa",
-  "Equipamento":              "equipamento",
-  "Modelo":                   "modelo",
-  "Versão S.O.":              "versao_so",
-  "BOOT / FIRMWARE VERSION":  "firmware",
-  "PUK (CRC)":                "puk_crc",
-  "Aplicação":                "aplicacao",  // ← corrigido (1 p)
-  "Versão APP":               "versao_app",
-  "Versão Módulo BT":         "versao_bt",
-  "Versão Módulo WIFI":       "versao_wifi",
-  "Versão Módulo GPRS":       "versao_gprs",
-  "Possui logo":              "possui_logo",
-  "Chaves":                   "chaves",
-  "Quantidade de chaves":     "qtd_chaves",
-  "Configurador":             "configurador",
-  "Fonte":                    "fonte",
-  "Tipo das chaves":          "tipo_chaves",
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const CAMINHO_PLANILHA = path.join(__dirname, "../data/ENVIO PAG.xlsx");
+
+const MAPA_VERSAO = {
+  "Empresa":                "empresa",
+  "Equipamento":            "equipamento",
+  "Modelo":                 "modelo",
+  "Versão S.O.":            "versao_so",
+  "BOOT / FIRMWARE VERSION":"firmware",
+  "PUK (CRC)":              "puk_crc",
+  "Versão Módulo BT":       "versao_bt",
+  "Versão Módulo WIFI":     "versao_wifi",
+  "Versão Módulo GPRS":     "versao_gprs",
+  "Possui logo":            "possui_logo",
+  "Chaves":                 "chaves",
+  "Quantidade de chaves":   "qtd_chaves",
+  "Configurador":           "configurador",
+  "Fonte":                  "fonte",
+  "Tipo das chaves":        "tipo_chaves",
 };
 
-function normalizeLogoField(value) {
-  const v = String(value ?? "").trim().toUpperCase();
-  return (v === "SIM" || v === "1" || v === "TRUE" || v === "S") ? "SIM" : "NÃO";
+function normalizar(valor, campo) {
+  if (typeof valor === "string") {
+    valor = valor.trim();
+    if (valor === "") return null;
+  }
+  if (campo === "qtd_chaves") {
+    const n = parseInt(valor, 10);
+    return Number.isNaN(n) ? null : n;
+  }
+  return valor ?? null;
 }
 
-async function run() {
-  const filePath = process.argv[2];
+function extrairApp(linha) {
+  const nome = typeof linha["Applicação"] === "string" ? linha["Applicação"].trim() : null;
+  const versao = linha["Versão APP"] != null ? String(linha["Versão APP"]).trim() : null;
+  if (!nome && !versao) return null;
+  return { nome: nome || "", versao: versao || "" };
+}
 
-  if (!filePath) {
-    console.error("\nUso: node src/scripts/importExcel.js <caminho>\n");
-    process.exit(1);
+// Agrupa linhas: uma linha com Equipamento/Modelo preenchido inicia um novo
+// pacote; linhas seguintes com esses campos nulos são aplicações adicionais.
+function agrupar(rows) {
+  const pacotes = [];
+  let atual = null;
+
+  for (const linha of rows) {
+    const novoRegistro = linha["Equipamento"] != null || linha["Modelo"] != null;
+
+    if (novoRegistro) {
+      if (atual) pacotes.push(atual);
+      atual = { linha, aplicacoes: [] };
+    }
+
+    if (atual) {
+      const app = extrairApp(linha);
+      if (app) atual.aplicacoes.push(app);
+    }
   }
 
-  const resolvedPath = path.resolve(filePath);
-  console.log(`\nLendo arquivo: ${resolvedPath}`);
+  if (atual) pacotes.push(atual);
+  return pacotes;
+}
 
-  let workbook;
-  try {
-    workbook = readFile(resolvedPath);  // ← usa resolvedPath, não filePath
-  } catch (error) {
-    console.error("Erro ao abrir o arquivo:", error);
-    process.exit(1);
-  }
-
-  const sheetName = workbook.SheetNames[0];
-  console.log(`Aba utilizada: "${sheetName}"`);
-
-  const sheet = workbook.Sheets[sheetName];
-  const rows = utils.sheet_to_json(sheet, { defval: null, range: 1 });
-  console.log("Cabeçalhos:", Object.keys(rows[0]));
-
-  if (rows.length === 0) {
-    console.log("Nenhuma linha encontrada na planilha.");
-    process.exit(0);
-  }
-
-  const headers = Object.keys(rows[0]);
-  console.log(`\nColunas encontradas (${headers.length}):`);
-  headers.forEach((h) => console.log(`  - "${h}"`));
-  console.log("");
-
+async function importar() {
   await sequelize.authenticate();
   await sequelize.sync();
 
-  let inserted = 0;
-  let skipped = 0;
+  const wb = XLSX.readFile(CAMINHO_PLANILHA, { cellDates: true });
+  const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: null });
 
-  for (const [i, row] of rows.entries()) {
-    const record = {};
+  const pacotes = agrupar(rows);
+  console.log(`Encontrados ${pacotes.length} pacotes na planilha.`);
 
-    for (const [excelCol, dbField] of Object.entries(COLUMN_MAP)) {
-      const value = row[excelCol];
-      if (value === null || value === undefined) continue;
+  let importados = 0;
 
-      if (dbField === "possui_logo") {
-        record[dbField] = normalizeLogoField(value);
-      } else if (dbField === "qtd_chaves") {
-        const n = Number(value);
-        record[dbField] = isNaN(n) ? null : n;
-      } else {
-        record[dbField] = String(value).trim();
+  for (const { linha, aplicacoes } of pacotes) {
+    const dadosVersao = {};
+    for (const [colExcel, campo] of Object.entries(MAPA_VERSAO)) {
+      dadosVersao[campo] = normalizar(linha[colExcel], campo);
+    }
+
+    const record = await VersionControl.create(dadosVersao);
+
+    // Define createdAt manualmente se a planilha tiver data
+    const dataCriacao = linha["Data Criação do pacote"];
+    if (dataCriacao) {
+      const data = dataCriacao instanceof Date ? dataCriacao : new Date(dataCriacao);
+      if (!isNaN(data.getTime())) {
+        await sequelize.query(
+          "UPDATE VersionControls SET createdAt = ?, updatedAt = ? WHERE id = ?",
+          { replacements: [data, data, record.id] }
+        );
       }
     }
 
-    if (!record.empresa && !record.equipamento && !record.modelo) {
-      skipped++;
-      continue;
+    if (aplicacoes.length > 0) {
+      await AplicacaoVersao.bulkCreate(
+        aplicacoes.map((a) => ({ version_control_id: record.id, nome: a.nome, versao: a.versao }))
+      );
     }
 
-    try {
-      await VersionControl.create(record);
-      inserted++;
-      if (inserted % 50 === 0) console.log(`  ${inserted} registros inseridos...`);
-    } catch (err) {
-      console.warn(`  Linha ${i + 2} ignorada: ${err.message}`);
-      skipped++;
-    }
+    console.log(`  [${importados + 1}] ${dadosVersao.empresa} / ${dadosVersao.equipamento} — ${aplicacoes.length} aplicação(ões)`);
+    importados++;
   }
 
-  console.log(`\nImportação concluída!`);
-  console.log(`  ✔ Inseridos: ${inserted}`);
-  console.log(`  ✗ Ignorados: ${skipped}`);
-
-  await sequelize.close();
+  console.log(`\nConcluído: ${importados} pacote(s) importado(s).`);
+  process.exit();
 }
 
-run();
+importar().catch((err) => {
+  console.error("Erro na importação:", err);
+  process.exit(1);
+});

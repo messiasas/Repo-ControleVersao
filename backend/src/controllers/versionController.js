@@ -34,3 +34,13 @@ export const update = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const remove = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await service.remove(id);
+        res.json({ message: "Pacote excluído com sucesso." });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

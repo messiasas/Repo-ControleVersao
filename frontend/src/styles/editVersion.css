@@ -46,13 +46,51 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
   padding: 0 32px;
   z-index: 100;
 }
 
+.delete-zone {
+  background: #fff5f5;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.delete-input:focus {
+  border-color: #b91c1c !important;
+  box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.12) !important;
+}
+
+.delete-package-button {
+  height: 46px;
+  padding: 0 28px;
+  border: 1px solid #b91c1c;
+  border-radius: 10px;
+  background: white;
+  color: #b91c1c;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.delete-package-button:hover:not(:disabled) {
+  background: #b91c1c;
+  color: white;
+}
+
+.delete-package-button:disabled {
+  border-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
 .edit-save-button {
-  width: 100%;
-  max-width: 600px;
+  flex: 1;
+  max-width: 500px;
   height: 46px;
   border: none;
   border-radius: 10px;

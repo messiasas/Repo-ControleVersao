@@ -24,21 +24,29 @@ function AppNomeCell({ data }) {
 }
 
 const columns = [
-  { field: "empresa",    rowGroup: true, hide: true },
-  { field: "modelo",     rowGroup: true, hide: true },
-  { field: "equipamento", filter: true },
-  { field: "versao_so",  headerName: "Versão SO",    filter: true },
-  { field: "firmware",                                filter: true },
-  { field: "puk_crc",    headerName: "PUK/CRC",      filter: true },
+  { field: "empresa",    rowGroup: true, headerName: "Empresa", filter: true, minWidth: 200 },
+  { field: "equipamento", filter: true, minWidth: 200 },
+  { field: "modelo",     rowGroup: true, headerName: "Modelo", filter: true, minWidth: 180 },
+  
+  { field: "versao_so",  headerName: "Versão SO",    filter: true, minWidth: 400 },
+  { field: "firmware",                                filter: true,minWidth: 400 },
+  { field: "puk_crc",    headerName: "PUK/CRC",      filter: true, minWidth: 300 },
   {
     field: "aplicacoes",
     headerName: "Aplicação",
     cellRenderer: AppNomeCell,
     valueGetter: (p) => (p.data?.aplicacoes || []).map((a) => a.nome).filter(Boolean).join(", "),
+    minWidth: 300,
   },
-  { field: "versao_bt",  headerName: "Versão BT",    filter: true },
-  { field: "versao_wifi", headerName: "Wi-Fi",       filter: true },
-  { field: "versao_gprs", headerName: "GPRS",        filter: true },
+  {
+    field: "aplicacoes_versao",
+    headerName: "Versão APP",
+    filter: true,
+    valueGetter: (p) => (p.data?.aplicacoes || []).map((a) => a.versao).filter(Boolean).join(", "),
+  },
+  { field: "versao_bt",  headerName: "Versão BT",    filter: true, minWidth: 300 },
+  { field: "versao_wifi", headerName: "Wi-Fi",       filter: true, minWidth: 300 },
+  { field: "versao_gprs", headerName: "GPRS",        filter: true , minWidth: 300},
   {
     field: "possui_logo",
     headerName: "Possui logo",
@@ -53,6 +61,16 @@ const columns = [
   { field: "configurador", headerName: "Configurador", filter: true },
   { field: "fonte",        headerName: "Fonte",        filter: true },
   { field: "tipo_chaves",  headerName: "Tipo chave",  filter: true },
+  {
+    field: "createdAt",
+    headerName: "Data",
+    filter: "agDateColumnFilter",
+    valueFormatter: (p) => {
+      if (!p.value) return "—";
+      const d = new Date(p.value);
+      return d.toLocaleDateString("pt-BR");
+    },
+  },
 ];
 
 const autoGroupColumnDef = {
