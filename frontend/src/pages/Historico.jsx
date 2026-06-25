@@ -43,15 +43,20 @@ export default function Historico({ onSelectPackage }) {
               <th>Empresa</th>
               <th>Equipamento</th>
               <th>Última atualização</th>
+              <th>Responsável</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((pkg, i) => (
-              <tr key={pkg.id} className="historico-row" onClick={() => onSelectPackage(pkg)}>
+              <tr key={pkg.id} className={`historico-row${pkg.deleted ? " historico-row--deleted" : ""}`} onClick={() => onSelectPackage(pkg)}>
                 <td>{i + 1}</td>
-                <td>{pkg.empresa || "—"}</td>
+                <td>
+                  {pkg.empresa || "—"}
+                  {pkg.deleted && <span className="badge-excluido">Excluído</span>}
+                </td>
                 <td>{pkg.equipamento || "—"}</td>
                 <td>{new Date(pkg.updatedAt).toLocaleString("pt-BR")}</td>
+                <td>{pkg.lastEditor || "—"}</td>
               </tr>
             ))}
           </tbody>

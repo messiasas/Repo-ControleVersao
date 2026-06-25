@@ -55,6 +55,7 @@ export default function AddUserModal({ onClose, onSuccess }) {
                 placeholder="usuario@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="off"
               />
             </div>
 
@@ -66,6 +67,7 @@ export default function AddUserModal({ onClose, onSuccess }) {
                 placeholder="Mínimo 6 caracteres"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
               />
             </div>
 
@@ -78,6 +80,7 @@ export default function AddUserModal({ onClose, onSuccess }) {
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                autoComplete="new-password"
               />
             </div>
 

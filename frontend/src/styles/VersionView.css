@@ -1,29 +1,26 @@
 .version-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    display: flex;
+    flex-direction: column;
 
-    gap: 20px;
+    gap: 16px;
 
-    padding: 24px;
+    padding: 16px;
 
     background-color: #f4f6f9;
 
     min-height: 100vh;
-
-    align-content: start;
 }
 
 .info-card {
     background: #ffffff;
 
-    border-radius: 12px;
+    border-radius: 10px;
 
-    padding: 20px;
+    padding: 14px 16px;
 
-    border-top: 7px solid #4b6f5d;
+    border-top: 5px solid #4b6f5d;
 
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
     transition:
         transform 0.2s ease,
@@ -38,15 +35,15 @@
 }
 
 .info-card h2 {
-    margin: 0 0 16px 0;
+    margin: 0 0 12px 0;
 
-    padding-bottom: 12px;
+    padding-bottom: 10px;
 
     border-bottom: 1px solid #e5e7eb;
 
     color: #1f2937;
 
-    font-size: 27px;
+    font-size: 18px;
 
     font-weight: 700;
 }
@@ -87,12 +84,48 @@
     gap: 8px;
 }
 
+.apps-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.apps-toggle {
+    display: flex;
+    gap: 4px;
+}
+
+.toggle-btn {
+    padding: 3px 10px;
+    font-size: 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #f3f4f6;
+    color: #374151;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.toggle-btn.active {
+    background: #4b6f5d;
+    color: #ffffff;
+    border-color: #4b6f5d;
+}
+
+.toggle-btn:hover:not(.active) {
+    background: #e5e7eb;
+}
+
+.apps-table-wrapper {
+    overflow-x: auto;
+}
+
 .apps-table {
-    width: 100%;
-    table-layout: fixed;
     border-collapse: collapse;
     font-size: 14px;
-    min-width: 0;
+    white-space: nowrap;
 }
 
 .apps-table th,
@@ -100,15 +133,12 @@
     border: 1px solid #d1d5db;
     padding: 6px 12px;
     text-align: left;
-    overflow-wrap: break-word;
-    word-break: break-word;
 }
 
 .apps-table th {
     background-color: #f3f4f6;
     font-weight: 600;
     color: #374151;
-    white-space: nowrap;
 }
 
 .apps-table th:first-child,
@@ -124,6 +154,20 @@
 
 .apps-table tr:hover td {
     background-color: #eef2ff;
+}
+
+.apps-text-list {
+    margin: 0;
+    padding: 0 0 0 4px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.apps-text-list li {
+    font-size: 15px;
+    color: #111827;
 }
 
 @media (max-width: 600px) {

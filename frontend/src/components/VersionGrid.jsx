@@ -1,4 +1,5 @@
 import "../styles/grid.css";
+import { openVersionView } from "../utils/openVersionView.js";
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 
@@ -12,8 +13,7 @@ function AppNomeCell({ data }) {
   if (apps.length === 1) return <span>{apps[0].nome || "—"}</span>;
 
   function handleVer() {
-    localStorage.setItem("selectedVersion", JSON.stringify(data));
-    window.open("/version-view", "_blank");
+    openVersionView(data);
   }
 
   return (

@@ -4,6 +4,7 @@ import "../styles/VersionView.css";
 function VersionView() {
 
     const [versionData, setVersionData] = useState(null);
+    const [appsMode, setAppsMode] = useState("grade");
 
     useEffect(() => {
 
@@ -76,26 +77,50 @@ function VersionView() {
             </div>
 
             <div className="apps-section">
-                <span className="info-label">Aplicações</span>
+                <div className="apps-header">
+                    <span className="info-label">Aplicações</span>
+                    {versionData?.aplicacoes?.length > 0 && (
+                        <div className="apps-toggle">
+                            <button
+                                className={`toggle-btn${appsMode === "texto" ? " active" : ""}`}
+                                onClick={() => setAppsMode("texto")}
+                            >Texto</button>
+                            <button
+                                className={`toggle-btn${appsMode === "grade" ? " active" : ""}`}
+                                onClick={() => setAppsMode("grade")}
+                            >Grade</button>
+                        </div>
+                    )}
+                </div>
                 {versionData?.aplicacoes?.length > 0 ? (
-                  <table className="apps-table">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Nome</th>
-                        <th>Versão</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {versionData.aplicacoes.map((a, i) => (
-                        <tr key={i}>
-                          <td>{i + 1}</td>
-                          <td>{a.nome || "—"}</td>
-                          <td>{a.versao || "—"}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                    appsMode === "grade" ? (
+                        <div className="apps-table-wrapper">
+                            <table className="apps-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nome</th>
+                                        <th>Versão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {versionData.aplicacoes.map((a, i) => (
+                                        <tr key={i}>
+                                            <td>{i + 1}</td>
+                                            <td>{a.nome || "—"}</td>
+                                            <td>{a.versao || "—"}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <ul className="apps-text-list">
+                            {versionData.aplicacoes.map((a, i) => (
+                                <li key={i}>{a.nome || "—"} - {a.versao || "—"}</li>
+                            ))}
+                        </ul>
+                    )
                 ) : <span className="info-value">—</span>}
             </div>
 

@@ -8,6 +8,8 @@ import NewPackageModal from "../components/NewPackageModal.jsx";
 import Historico from "./Historico.jsx";
 import HistoricoDetalhe from "./HistoricoDetalhe.jsx";
 import AddUserModal from "../components/AddUserModal.jsx";
+import EditVersionModal from "../components/EditVersionModal.jsx";
+import { openVersionView } from "../utils/openVersionView.js";
 
 function Admin() {
   const [data, setData] = useState([]);
@@ -15,6 +17,7 @@ function Admin() {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [view, setView] = useState("versoes"); // "versoes" | "historico" | "historico-detalhe"
   const [selectedHistorico, setSelectedHistorico] = useState(null);
@@ -93,8 +96,7 @@ function Admin() {
               className={`apply-button ${selectedRow ? "active" : ""}`}
               onClick={() => {
                 if (selectedRow) {
-                  localStorage.setItem("selectedVersion", JSON.stringify(selectedRow));
-                  window.open("/version-view", "_blank");
+                  openVersionView(selectedRow);
                 }
               }}
             >
@@ -108,12 +110,7 @@ function Admin() {
             <button
               className={`settings-button ${selectedRow ? "active" : ""}`}
               disabled={!selectedRow}
-              onClick={() => {
-                if (selectedRow) {
-                  localStorage.setItem("editVersion", JSON.stringify(selectedRow));
-                  window.open("/edit-version", "_blank");
-                }
-              }}
+              onClick={() => { if (selectedRow) setShowEditModal(true); }}
             >
               Configurações
             </button>
@@ -138,6 +135,14 @@ function Admin() {
 
       {showAddUser && (
         <AddUserModal onClose={() => setShowAddUser(false)} />
+      )}
+
+      {showEditModal && selectedRow && (
+        <EditVersionModal
+          selectedRow={selectedRow}
+          onClose={() => setShowEditModal(false)}
+          onSuccess={() => { setRefresh((r) => r + 1); setShowEditModal(false); }}
+        />
       )}
     </div>
   );

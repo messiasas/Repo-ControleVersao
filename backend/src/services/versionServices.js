@@ -81,6 +81,8 @@ export const update = async (id, data, userId) => {
   return updated;
 };
 
-export const remove = async (id) => {
+export const remove = async (id, userId) => {
+  const record = await repo.findById(id);
+  await createLog(userId, "DELETE", id, record ? record.toJSON() : null);
   await repo.remove(id);
 };
