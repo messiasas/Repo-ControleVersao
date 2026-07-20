@@ -9,7 +9,8 @@ async function startServer(){
         console.log("Conectado ao banco.");
 
         await sequelize.sync({ alter: true });
-        app.listen(PORT, () => {
+
+        app.listen(PORT, () => {                
             console.log(`Server rodando na port: ${PORT}`);
         });
     } catch (error) {

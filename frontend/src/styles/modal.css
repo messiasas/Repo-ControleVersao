@@ -187,6 +187,18 @@
   cursor: not-allowed;
 }
 
+.modal-sobre .modal-header {
+  background: #5f7c69;
+}
+
+.modal-sobre .modal-btn-submit {
+  background: #5f7c69;
+}
+
+.modal-sobre .modal-btn-submit:hover {
+  background: #4c8b72;
+}
+
 .aplicacoes-container {
   grid-column: 1 / -1;
   display: flex;

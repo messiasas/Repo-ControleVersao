@@ -68,7 +68,7 @@ export const getAll = async ({ page, limit, sort, order, search, filters }) => {
   };
 };
 
-export const create = async (data, userId) => {
+export const create = async (data, userId) => { // criar o registro e também gerar um log de auditoria
   const record = await repo.create(data);
   await createLog(userId, "CREATE", record.id, record.toJSON());
   return record;

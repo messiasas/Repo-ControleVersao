@@ -100,7 +100,7 @@ function Admin() {
                 }
               }}
             >
-              Aplicar visualização única
+              Visualizar
             </button>
 
             <button className="new-package-button" onClick={() => setShowModal(true)}>

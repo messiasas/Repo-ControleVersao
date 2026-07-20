@@ -8,11 +8,7 @@ export const getAll = async(req, res) => {
         const result = await service.getAll({
             page: Number(page),
             limit: limit ? Number(limit) : null,
-            sort,
-            order,
-            search,
-            filters
-        }); // O filter passa tudo de forma dinamica
+            sort, order, search, filters }); // O filter passa tudo de forma dinamica
 
         return res.json(result);
     }catch (error){

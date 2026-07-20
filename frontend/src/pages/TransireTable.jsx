@@ -67,13 +67,13 @@ function TransireTable(){
         <button
           className={`apply-button ${selectedRow ? "active" : ""}`}
           onClick={() => {
-          console.log("Aplicar visualização única");
+          console.log("Visualizar");
 
             if (selectedRow) {
               openVersionView(selectedRow);
             }
           }}>
-          Aplicar visualização única
+          Visualizar
         </button>
 
       </div>
@@ -86,7 +86,7 @@ function TransireTable(){
 
       {showSobre && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setShowSobre(false)}>
-          <div className="modal" style={{ width: 680, maxWidth: "95vw" }}>
+          <div className="modal modal-sobre" style={{ width: 680, maxWidth: "95vw" }}>
             <div className="modal-header">
               <span className="modal-title">Sobre o sistema</span>
               <button className="modal-close" onClick={() => setShowSobre(false)}>×</button>
@@ -117,7 +117,7 @@ function TransireTable(){
                 <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: "#1f2937" }}>Como usar</p>
                 <ol style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 5, fontSize: 14, color: "#374151", lineHeight: 1.6 }}>
                   <li>Selecione uma linha na tabela para destacar o equipamento desejado</li>
-                  <li>Use <strong>Aplicar visualização única</strong> para abrir o painel completo em nova aba</li>
+                  <li>Use <strong>Visualizar</strong> para abrir o painel completo em nova aba</li>
                   <li>Utilize a barra de busca para filtrar por empresa, modelo ou versão</li>
                 </ol>
               </div>
