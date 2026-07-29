@@ -5,6 +5,10 @@ const aplicacaoItem = Joi.object({
   versao: Joi.string().optional().allow(""),
 });
 
+const chaveItem = Joi.object({
+  chave: Joi.string().optional().allow(""),
+});
+
 /*  versionUpdateSchema (usado no PUT) tem os mesmos campos, mas todos .optional() — faz sentido porque
 uma atualização pode mandar só o campo que mudou, sem precisar reenviar tudo. */
 
@@ -13,7 +17,14 @@ export const versionUpdateSchema = Joi.object({
   equipamento: Joi.string().optional(),
 
   modelo: Joi.string().optional(),
+  plataforma: Joi.string().optional().allow(""),
+
+  fw: Joi.string().max(30).optional().allow(""),
+  sphs: Joi.string().max(30).optional().allow(""),
+  firmware_version: Joi.string().max(30).optional().allow(""),
+
   versao_so: Joi.string().optional().allow(""),
+  security_version: Joi.string().max(100).optional().allow(""),
 
   firmware: Joi.string().optional().allow(""),
   puk_crc: Joi.string().optional().allow(""),
@@ -24,7 +35,7 @@ export const versionUpdateSchema = Joi.object({
   versao_gprs: Joi.string().optional().allow(""),
   possui_logo: Joi.string().valid("SIM", "NÃO").optional().allow(""),
 
-  chaves: Joi.string().optional().allow(""),
+  chaves: Joi.array().items(chaveItem).optional(),
   qtd_chaves: Joi.number().integer().optional().allow(null),
 
   configurador: Joi.string().optional().allow(""),
@@ -39,7 +50,14 @@ export const versionSchema = Joi.object({
   equipamento: Joi.string().required(),
 
   modelo: Joi.string().required(),
+  plataforma: Joi.string().optional().allow(""),
+
+  fw: Joi.string().max(30).optional().allow(""),
+  sphs: Joi.string().max(30).optional().allow(""),
+  firmware_version: Joi.string().max(30).optional().allow(""),
+
   versao_so: Joi.string().optional().allow(""),
+  security_version: Joi.string().max(100).optional().allow(""),
 
   firmware: Joi.string().optional().allow(""),
   puk_crc: Joi.string().optional().allow(""),
@@ -50,7 +68,7 @@ export const versionSchema = Joi.object({
   versao_gprs: Joi.string().optional().allow(""),
   possui_logo: Joi.string().valid("SIM", "NÃO").optional().allow(""),
 
-  chaves: Joi.string().optional().allow(""),
+  chaves: Joi.array().items(chaveItem).optional(),
   qtd_chaves: Joi.number().integer().optional().allow(null),
   configurador: Joi.string().optional().allow(""),
 

@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
-import { login, updateVersion, deleteVersion } from "../services/api.js";
+import { login, updateVersion, deleteVersion, getChaveConfigs, getDistinctPlataformas } from "../services/api.js";
 import "../styles/editVersion.css";
 import "../styles/modal.css";
 
+const DEFAULT_PLATAFORMAS = ["Android", "Prolin", "Monitor"];
+
 const EMPTY_APP = { nome: "", versao: "" };
+const EMPTY_CHAVE = { chave: "" };
 
 export default function EditVersion() {
   const [form, setForm] = useState(null);
   const [aplicacoes, setAplicacoes] = useState([{ ...EMPTY_APP }]);
+  const [chavesList, setChavesList] = useState([{ ...EMPTY_CHAVE }]);
+  const [chaveConfigs, setChaveConfigs] = useState([]);
+  const [existingPlataformas, setExistingPlataformas] = useState(DEFAULT_PLATAFORMAS);
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmEmail, setConfirmEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,8 +31,28 @@ export default function EditVersion() {
       if (parsed.aplicacoes && parsed.aplicacoes.length > 0) {
         setAplicacoes(parsed.aplicacoes.map((a) => ({ nome: a.nome || "", versao: a.versao || "" })));
       }
+      if (parsed.chaves && parsed.chaves.length > 0) {
+        setChavesList(parsed.chaves.map((c) => ({ chave: c.chave || "" })));
+      }
     }
   }, []);
+
+  useEffect(() => {
+    getChaveConfigs().then((data) => setChaveConfigs(Array.isArray(data) ? data : []));
+    getDistinctPlataformas().then((data) => {
+      const fromApi = Array.isArray(data) ? data : [];
+      setExistingPlataformas(Array.from(new Set([...DEFAULT_PLATAFORMAS, ...fromApi])));
+    });
+  }, []);
+
+  useEffect(() => {
+    const total = chavesList.reduce((sum, c) => {
+      const config = chaveConfigs.find((cc) => cc.nome === c.chave);
+      if (!config) return sum;
+      return sum + (Number(config.qtd_dukpt) || 0) + (Number(config.qtd_master_key) || 0);
+    }, 0);
+    setForm((prev) => (prev ? { ...prev, qtd_chaves: total } : prev));
+  }, [chavesList, chaveConfigs]);
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
@@ -48,6 +74,18 @@ export default function EditVersion() {
 
   function removeApp(index) {
     setAplicacoes((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function handleChaveChange(index, value) {
+    setChavesList((prev) => prev.map((c, i) => (i === index ? { chave: value } : c)));
+  }
+
+  function addChave() {
+    setChavesList((prev) => [...prev, { ...EMPTY_CHAVE }]);
+  }
+
+  function removeChave(index) {
+    setChavesList((prev) => prev.filter((_, i) => i !== index));
   }
 
   async function handleConfirm() {
@@ -77,11 +115,12 @@ export default function EditVersion() {
         return;
       }
 
-      const { id, createdAt, updatedAt, aplicacoes: _a, ...payload } = form;
+      const { id, createdAt, updatedAt, aplicacoes: _a, chaves: _c, ...payload } = form;
       const res = await updateVersion(id, {
         ...payload,
         qtd_chaves: payload.qtd_chaves !== "" ? Number(payload.qtd_chaves) : null,
         aplicacoes: aplicacoes.filter((a) => a.nome || a.versao),
+        chaves: chavesList.filter((c) => c.chave),
       });
 
       if (res && res.id) {
@@ -141,12 +180,44 @@ export default function EditVersion() {
             <label>Modelo <span className="required">*</span></label>
             <input className="form-input" name="modelo" value={form.modelo ?? ""} onChange={handleChange} />
           </div>
+          <div className="form-group">
+            <label>Plataforma</label>
+            <input
+              className="form-input"
+              name="plataforma"
+              list="plataformas-existentes"
+              value={form.plataforma ?? ""}
+              onChange={handleChange}
+              placeholder="Ex: Android, Prolin, Monitor"
+            />
+            <datalist id="plataformas-existentes">
+              {existingPlataformas.map((p) => (
+                <option key={p} value={p} />
+              ))}
+            </datalist>
+          </div>
+          <div className="form-group">
+            <label>FW</label>
+            <input className="form-input" name="fw" value={form.fw ?? ""} onChange={handleChange} maxLength={30} />
+          </div>
+          <div className="form-group">
+            <label>SPHS</label>
+            <input className="form-input" name="sphs" value={form.sphs ?? ""} onChange={handleChange} maxLength={30} />
+          </div>
+          <div className="form-group">
+            <label>Firmware version</label>
+            <input className="form-input" name="firmware_version" value={form.firmware_version ?? ""} onChange={handleChange} maxLength={30} />
+          </div>
 
           <div className="form-section-title">Versões de Software</div>
 
           <div className="form-group">
             <label>Versão SO</label>
             <input className="form-input" name="versao_so" value={form.versao_so ?? ""} onChange={handleChange} />
+          </div>
+          <div className="form-group">
+            <label>Security Version(SV)</label>
+            <input className="form-input" name="security_version" value={form.security_version ?? ""} onChange={handleChange} maxLength={100} />
           </div>
           <div className="form-group">
             <label>Firmware</label>
@@ -184,15 +255,12 @@ export default function EditVersion() {
           </div>
           <div className="form-group">
             <label>Qtd. Chaves</label>
-            <input className="form-input" type="number" name="qtd_chaves" value={form.qtd_chaves ?? ""} onChange={handleChange} min="0" />
+            <input className="form-input" type="number" name="qtd_chaves" value={form.qtd_chaves ?? 0} readOnly min="0" />
+            <span className="form-hint" style={{ margin: 0 }}>Calculado automaticamente a partir das chaves selecionadas abaixo.</span>
           </div>
           <div className="form-group">
             <label>Fonte</label>
             <input className="form-input" name="fonte" value={form.fonte ?? ""} onChange={handleChange} />
-          </div>
-          <div className="form-group">
-            <label>Chaves</label>
-            <input className="form-input" name="chaves" value={form.chaves ?? ""} onChange={handleChange} placeholder="Descreva as chaves" />
           </div>
           <div className="form-group">
             <label>Possui logo</label>
@@ -242,6 +310,45 @@ export default function EditVersion() {
             <button type="button" className="add-app-btn" onClick={addApp}>
               + Adicionar aplicação
             </button>
+          </div>
+
+          <div className="form-section-title">Chaves</div>
+
+          <div className="aplicacoes-container">
+            {chavesList.map((c, i) => (
+              <div key={i} className="aplicacao-item">
+                <div className="aplicacao-fields">
+                  <div className="form-group">
+                    <label>Chave</label>
+                    <input
+                      className="form-input"
+                      list="chaves-existentes"
+                      value={c.chave}
+                      onChange={(e) => handleChaveChange(i, e.target.value)}
+                      placeholder="Selecione uma chave existente ou digite uma nova"
+                    />
+                  </div>
+                </div>
+                {chavesList.length > 1 && (
+                  <button
+                    type="button"
+                    className="remove-app-btn"
+                    onClick={() => removeChave(i)}
+                    title="Remover chave"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
+            <button type="button" className="add-app-btn" onClick={addChave}>
+              + Adicionar chave
+            </button>
+            <datalist id="chaves-existentes">
+              {chaveConfigs.map((c) => (
+                <option key={c.id} value={c.nome} />
+              ))}
+            </datalist>
           </div>
 
           <div className="form-group full-width delete-zone">

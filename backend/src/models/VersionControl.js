@@ -6,8 +6,14 @@ const VersionControl = sequelize.define("VersionControl",
     empresa: DataTypes.STRING,
     equipamento: DataTypes.STRING,
     modelo: DataTypes.STRING,
+    plataforma: DataTypes.STRING,
+
+    fw: DataTypes.STRING(30),
+    sphs: DataTypes.STRING(30),
+    firmware_version: DataTypes.STRING(30),
 
     versao_so: DataTypes.STRING,
+    security_version: DataTypes.STRING(100),
     firmware: DataTypes.STRING,
     puk_crc: DataTypes.STRING,
 
@@ -19,7 +25,6 @@ const VersionControl = sequelize.define("VersionControl",
     versao_gprs: DataTypes.STRING,
     possui_logo: DataTypes.STRING,
 
-    chaves: DataTypes.STRING,
     qtd_chaves: DataTypes.INTEGER,
     configurador: DataTypes.STRING,
     

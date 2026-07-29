@@ -10,7 +10,7 @@ import { openVersionView } from "../utils/openVersionView.js";
 
 function TransireTable(){
     const [data, setData] = useState([]);
-    const [search, setSearch] = useState("");
+    const [filtros, setFiltros] = useState({ empresa: "", modelo: "", plataforma: "" });
     const [selectedRow, setSelectedRow] = useState(null);
     const [showSobre, setShowSobre] = useState(false);
 
@@ -18,7 +18,7 @@ function TransireTable(){
 
         const delayDebounce = setTimeout(() => {
         const fetchData = async () => {
-        const res = await getVersions(search);
+        const res = await getVersions(filtros);
 
         setData([...res.data]);
     };
@@ -27,7 +27,7 @@ function TransireTable(){
     }, 500);
 
     return () => clearTimeout(delayDebounce);
-    }, [search]);
+    }, [filtros]);
 
     console.log(data);
 
@@ -58,8 +58,8 @@ function TransireTable(){
       </div>
 
       <Filters
-        search={search}
-        setSearch={setSearch}
+        filtros={filtros}
+        setFiltros={setFiltros}
       />
 
       <div className="bottom-toolbar bottom-toolbar--single">

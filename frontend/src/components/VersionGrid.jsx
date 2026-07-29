@@ -23,12 +23,35 @@ function AppNomeCell({ data }) {
   );
 }
 
+function ChaveCell({ data }) {
+  const chaves = data?.chaves;
+
+  if (!chaves || chaves.length === 0) return <span>—</span>;
+
+  if (chaves.length === 1) return <span>{chaves[0].chave || "—"}</span>;
+
+  function handleVer() {
+    openVersionView(data);
+  }
+
+  return (
+    <button className="ver-apps-btn" onClick={handleVer}>
+      Ver ({chaves.length})
+    </button>
+  );
+}
+
 const columns = [
   { field: "empresa",    rowGroup: true, headerName: "Empresa", filter: true, minWidth: 200 },
   { field: "equipamento", filter: true, minWidth: 200 },
+  { field: "plataforma", headerName: "Plataforma", filter: true, minWidth: 180 },
   { field: "modelo",     rowGroup: true, headerName: "Modelo", filter: true, minWidth: 180 },
-  
+  { field: "fw",         headerName: "FW",           filter: true, minWidth: 140 },
+  { field: "sphs",       headerName: "SPHS",         filter: true, minWidth: 140 },
+  { field: "firmware_version", headerName: "Firmware version", filter: true, minWidth: 160 },
+
   { field: "versao_so",  headerName: "Versão SO",    filter: true, minWidth: 400 },
+  { field: "security_version", headerName: "Security Version(SV)", filter: true, minWidth: 220 },
   { field: "firmware",                                filter: true,minWidth: 400 },
   { field: "puk_crc",    headerName: "PUK/CRC",      filter: true, minWidth: 300 },
   {
@@ -56,7 +79,13 @@ const columns = [
       return (v === "SIM" || v === "1" || v === "TRUE") ? "SIM" : "NÃO";
     },
   },
-  { field: "chaves",       headerName: "Chaves",      filter: true },
+  {
+    field: "chaves",
+    headerName: "Chaves",
+    cellRenderer: ChaveCell,
+    valueGetter: (p) => (p.data?.chaves || []).map((c) => c.chave).filter(Boolean).join(", "),
+    minWidth: 250,
+  },
   { field: "qtd_chaves",   headerName: "Qtd Chaves",  filter: true },
   { field: "configurador", headerName: "Configurador", filter: true },
   { field: "fonte",        headerName: "Fonte",        filter: true },

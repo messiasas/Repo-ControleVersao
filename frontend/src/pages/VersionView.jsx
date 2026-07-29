@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { getChaveConfigs } from "../services/api.js";
 import "../styles/VersionView.css";
 
 function VersionView() {
 
     const [versionData, setVersionData] = useState(null);
+    const [chaveConfigs, setChaveConfigs] = useState([]);
     const [appsMode, setAppsMode] = useState("grade");
+    const [chavesMode, setChavesMode] = useState("grade");
 
     useEffect(() => {
 
@@ -20,6 +23,20 @@ function VersionView() {
 
     }, []);
 
+    useEffect(() => {
+        getChaveConfigs().then((data) => setChaveConfigs(Array.isArray(data) ? data : []));
+    }, []);
+
+    const totalDukpt = (versionData?.chaves || []).reduce((sum, c) => {
+        const config = chaveConfigs.find((cc) => cc.nome === c.chave);
+        return sum + (config ? Number(config.qtd_dukpt) || 0 : 0);
+    }, 0);
+
+    const totalMasterKey = (versionData?.chaves || []).reduce((sum, c) => {
+        const config = chaveConfigs.find((cc) => cc.nome === c.chave);
+        return sum + (config ? Number(config.qtd_master_key) || 0 : 0);
+    }, 0);
+
     return (
     <div className="version-container">
 
@@ -33,7 +50,7 @@ function VersionView() {
             <div className="info-row">
                 <span className="info-label">Chaves</span>
                 <span className="info-value">
-                    {versionData?.chaves ? "Sim" : "Não"}
+                    {versionData?.chaves?.length > 0 ? "Sim" : "Não"}
                 </span>
             </div>
 
@@ -60,6 +77,26 @@ function VersionView() {
                 <span className="info-value">{versionData?.equipamento}</span>
             </div>
 
+            <div className="info-row">
+                <span className="info-label">Plataforma</span>
+                <span className="info-value">{versionData?.plataforma}</span>
+            </div>
+
+            <div className="info-row">
+                <span className="info-label">FW</span>
+                <span className="info-value">{versionData?.fw}</span>
+            </div>
+
+            <div className="info-row">
+                <span className="info-label">SPHS</span>
+                <span className="info-value">{versionData?.sphs}</span>
+            </div>
+
+            <div className="info-row">
+                <span className="info-label">Firmware version</span>
+                <span className="info-value">{versionData?.firmware_version}</span>
+            </div>
+
         </div>
 
         <div className="info-card">
@@ -69,6 +106,11 @@ function VersionView() {
             <div className="info-row">
                 <span className="info-label">Versão SO</span>
                 <span className="info-value">{versionData?.versao_so}</span>
+            </div>
+
+            <div className="info-row">
+                <span className="info-label">Security Version(SV)</span>
+                <span className="info-value">{versionData?.security_version}</span>
             </div>
 
             <div className="info-row">
@@ -156,17 +198,70 @@ function VersionView() {
 
             <h2>Info. chaves</h2>
 
-            <div className="info-row">
-                <span className="info-label">Chaves</span>
-                <span className="info-value">
-                    {versionData?.chaves ? "Sim" : "Não"}
-                </span>
+            <div className="apps-section">
+                <div className="apps-header">
+                    <span className="info-label">Chaves</span>
+                    {versionData?.chaves?.length > 0 && (
+                        <div className="apps-toggle">
+                            <button
+                                className={`toggle-btn${chavesMode === "texto" ? " active" : ""}`}
+                                onClick={() => setChavesMode("texto")}
+                            >Texto</button>
+                            <button
+                                className={`toggle-btn${chavesMode === "grade" ? " active" : ""}`}
+                                onClick={() => setChavesMode("grade")}
+                            >Grade</button>
+                        </div>
+                    )}
+                </div>
+                {versionData?.chaves?.length > 0 ? (
+                    chavesMode === "grade" ? (
+                        <div className="apps-table-wrapper">
+                            <table className="apps-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Chave</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {versionData.chaves.map((c, i) => (
+                                        <tr key={i}>
+                                            <td>{i + 1}</td>
+                                            <td>{c.chave || "—"}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <ul className="apps-text-list">
+                            {versionData.chaves.map((c, i) => (
+                                <li key={i}>{c.chave || "—"}</li>
+                            ))}
+                        </ul>
+                    )
+                ) : <span className="info-value">—</span>}
             </div>
 
             <div className="info-row">
                 <span className="info-label">Qtd chaves</span>
                 <span className="info-value">
                     {versionData?.qtd_chaves}
+                </span>
+            </div>
+
+            <div className="info-row">
+                <span className="info-label">Total DUKPT</span>
+                <span className="info-value">
+                    {totalDukpt}
+                </span>
+            </div>
+
+            <div className="info-row">
+                <span className="info-label">Total Master Key</span>
+                <span className="info-value">
+                    {totalMasterKey}
                 </span>
             </div>
 

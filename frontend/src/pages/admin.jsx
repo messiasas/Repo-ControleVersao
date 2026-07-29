@@ -9,15 +9,17 @@ import Historico from "./Historico.jsx";
 import HistoricoDetalhe from "./HistoricoDetalhe.jsx";
 import AddUserModal from "../components/AddUserModal.jsx";
 import EditVersionModal from "../components/EditVersionModal.jsx";
+import ChaveConfigModal from "../components/ChaveConfigModal.jsx";
 import { openVersionView } from "../utils/openVersionView.js";
 
 function Admin() {
   const [data, setData] = useState([]);
-  const [search, setSearch] = useState("");
+  const [filtros, setFiltros] = useState({ empresa: "", modelo: "", plataforma: "" });
   const [selectedRow, setSelectedRow] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showChaveConfig, setShowChaveConfig] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [view, setView] = useState("versoes"); // "versoes" | "historico" | "historico-detalhe"
   const [selectedHistorico, setSelectedHistorico] = useState(null);
@@ -43,13 +45,13 @@ function Admin() {
     if (view !== "versoes") return;
     const delayDebounce = setTimeout(() => {
       const fetchData = async () => {
-        const res = await getVersions(search);
+        const res = await getVersions(filtros);
         setData([...res.data]);
       };
       fetchData();
     }, 500);
     return () => clearTimeout(delayDebounce);
-  }, [search, refresh, view]);
+  }, [filtros, refresh, view]);
 
   function handlePackageSuccess() {
     setShowModal(false);
@@ -82,7 +84,7 @@ function Admin() {
 
       {view === "versoes" && (
         <>
-          <Filters search={search} setSearch={setSearch} theme="amazonas" />
+          <Filters filtros={filtros} setFiltros={setFiltros} theme="amazonas" />
 
           <Grid
             data={data}
@@ -114,6 +116,10 @@ function Admin() {
             >
               Configurações
             </button>
+
+            <button className="new-package-button" onClick={() => setShowChaveConfig(true)}>
+              Configurar chaves
+            </button>
           </div>
         </>
       )}
@@ -143,6 +149,10 @@ function Admin() {
           onClose={() => setShowEditModal(false)}
           onSuccess={() => { setRefresh((r) => r + 1); setShowEditModal(false); }}
         />
+      )}
+
+      {showChaveConfig && (
+        <ChaveConfigModal onClose={() => setShowChaveConfig(false)} />
       )}
     </div>
   );

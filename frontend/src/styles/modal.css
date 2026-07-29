@@ -261,3 +261,57 @@
 .add-app-btn:hover {
   background: #e6f4f7;
 }
+
+.form-hint {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.chave-config-table-wrapper {
+  overflow-x: auto;
+}
+
+.chave-config-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.chave-config-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #005C73;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.chave-config-table td {
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+.chave-config-table input[type="number"] {
+  width: 90px;
+}
+
+.chave-config-total {
+  font-weight: 700;
+  color: #1f2937;
+  text-align: center;
+}
+
+.chave-config-actions {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.chave-config-actions .modal-btn-submit,
+.chave-config-actions .modal-btn-cancel {
+  padding: 8px 14px;
+  font-size: 13px;
+}

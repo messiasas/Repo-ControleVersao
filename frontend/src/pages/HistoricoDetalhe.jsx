@@ -6,14 +6,18 @@ const FIELD_LABELS = {
   empresa:      "Empresa",
   equipamento:  "Equipamento",
   modelo:       "Modelo",
+  plataforma:   "Plataforma",
+  fw:           "FW",
+  sphs:         "SPHS",
+  firmware_version: "Firmware version",
   versao_so:    "Versão SO",
+  security_version: "Security Version(SV)",
   firmware:     "Firmware",
   puk_crc:      "PUK/CRC",
   versao_bt:    "Versão BT",
   versao_wifi:  "Wi-Fi",
   versao_gprs:  "GPRS",
   possui_logo:  "Possui logo",
-  chaves:       "Chaves",
   qtd_chaves:   "Qtd Chaves",
   configurador: "Configurador",
   fonte:        "Fonte",
@@ -35,6 +39,12 @@ function computeDiff(current, previous) {
   const appsBefore = JSON.stringify((previous.aplicacoes || []).map(a => ({ nome: a.nome, versao: a.versao })));
   if (appsNow !== appsBefore) {
     changed._aplicacoes = { from: previous.aplicacoes || [], to: current.aplicacoes || [] };
+  }
+
+  const chavesNow = JSON.stringify((current.chaves || []).map(c => c.chave));
+  const chavesBefore = JSON.stringify((previous.chaves || []).map(c => c.chave));
+  if (chavesNow !== chavesBefore) {
+    changed._chaves = { from: previous.chaves || [], to: current.chaves || [] };
   }
 
   return changed;
@@ -112,13 +122,16 @@ export default function HistoricoDetalhe({ pkg }) {
                       {details.aplicacoes?.length > 0 && (
                         <AppsTable apps={details.aplicacoes} />
                       )}
+                      {details.chaves?.length > 0 && (
+                        <ChavesTable chaves={details.chaves} />
+                      )}
                     </>
                   ) : hasDiff ? (
                     /* UPDATE com diferenças: mostra só o que mudou */
                     <>
                       <p className="diff-subtitle">Campos alterados nesta atualização:</p>
                       <div className="timeline-fields">
-                        {Object.entries(diff).filter(([k]) => k !== "_aplicacoes").map(([key, { from, to }]) => (
+                        {Object.entries(diff).filter(([k]) => k !== "_aplicacoes" && k !== "_chaves").map(([key, { from, to }]) => (
                           <div key={key} className="timeline-field-row diff-row">
                             <span className="timeline-field-label">{FIELD_LABELS[key]}</span>
                             <span className="diff-values">
@@ -135,6 +148,14 @@ export default function HistoricoDetalhe({ pkg }) {
                           <AppsTable apps={diff._aplicacoes.from} />
                           <p className="diff-subtitle" style={{ marginTop: 12 }}>Aplicações depois:</p>
                           <AppsTable apps={diff._aplicacoes.to} />
+                        </div>
+                      )}
+                      {diff._chaves && (
+                        <div className="diff-apps-section">
+                          <p className="diff-subtitle">Chaves antes:</p>
+                          <ChavesTable chaves={diff._chaves.from} />
+                          <p className="diff-subtitle" style={{ marginTop: 12 }}>Chaves depois:</p>
+                          <ChavesTable chaves={diff._chaves.to} />
                         </div>
                       )}
                     </>
@@ -166,6 +187,28 @@ function AppsTable({ apps }) {
               <td>{j + 1}</td>
               <td>{a.nome || "—"}</td>
               <td>{a.versao || "—"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function ChavesTable({ chaves }) {
+  if (!chaves || chaves.length === 0) return null;
+  return (
+    <div className="timeline-apps">
+      <span className="timeline-apps-label">Chaves</span>
+      <table className="historico-apps-table">
+        <thead>
+          <tr><th>#</th><th>Chave</th></tr>
+        </thead>
+        <tbody>
+          {chaves.map((c, j) => (
+            <tr key={j}>
+              <td>{j + 1}</td>
+              <td>{c.chave || "—"}</td>
             </tr>
           ))}
         </tbody>

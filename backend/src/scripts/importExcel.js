@@ -2,7 +2,7 @@ import XLSX from "xlsx";
 import path from "path";
 import { fileURLToPath } from "url";
 import sequelize from "../config/database.js";
-import { VersionControl, AplicacaoVersao } from "../models/index.js";
+import { VersionControl, AplicacaoVersao, ChaveVersao } from "../models/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CAMINHO_PLANILHA = path.join(__dirname, "../data/ENVIO PAG.xlsx");
@@ -18,7 +18,6 @@ const MAPA_VERSAO = {
   "Versão Módulo WIFI":     "versao_wifi",
   "Versão Módulo GPRS":     "versao_gprs",
   "Possui logo":            "possui_logo",
-  "Chaves":                 "chaves",
   "Quantidade de chaves":   "qtd_chaves",
   "Configurador":           "configurador",
   "Fonte":                  "fonte",
@@ -42,6 +41,13 @@ function extrairApp(linha) {
   const versao = linha["Versão APP"] != null ? String(linha["Versão APP"]).trim() : null;
   if (!nome && !versao) return null;
   return { nome: nome || "", versao: versao || "" };
+}
+
+// A coluna "Chaves" pode trazer mais de uma chave separada por vírgula, ponto e vírgula ou quebra de linha.
+function extrairChaves(linha) {
+  const bruto = linha["Chaves"];
+  if (typeof bruto !== "string") return [];
+  return bruto.split(/[,;\n]/).map((v) => v.trim()).filter(Boolean);
 }
 
 // Agrupa linhas: uma linha com Equipamento/Modelo preenchido inicia um novo
@@ -86,6 +92,8 @@ async function importar() {
       dadosVersao[campo] = normalizar(linha[colExcel], campo);
     }
 
+    const chaves = extrairChaves(linha);
+
     const record = await VersionControl.create(dadosVersao);
 
     // Define createdAt manualmente se a planilha tiver data
@@ -106,7 +114,13 @@ async function importar() {
       );
     }
 
-    console.log(`  [${importados + 1}] ${dadosVersao.empresa} / ${dadosVersao.equipamento} — ${aplicacoes.length} aplicação(ões)`);
+    if (chaves.length > 0) {
+      await ChaveVersao.bulkCreate(
+        chaves.map((chave) => ({ version_control_id: record.id, chave }))
+      );
+    }
+
+    console.log(`  [${importados + 1}] ${dadosVersao.empresa} / ${dadosVersao.equipamento} — ${aplicacoes.length} aplicação(ões), ${chaves.length} chave(s)`);
     importados++;
   }
 

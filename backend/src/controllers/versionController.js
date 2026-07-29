@@ -40,3 +40,21 @@ export const remove = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const getDistinctChaves = async (req, res) => {
+    try {
+        const chaves = await service.getDistinctChaves();
+        res.json(chaves);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const getDistinctPlataformas = async (req, res) => {
+    try {
+        const plataformas = await service.getDistinctPlataformas();
+        res.json(plataformas);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

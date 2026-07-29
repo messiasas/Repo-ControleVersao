@@ -1,7 +1,11 @@
 const BASE_URL = "http://localhost:3000";
 
-export const getVersions = async (search) => {
-  const query = search?.trim() ? `?search=${encodeURIComponent(search)}` : "";
+export const getVersions = async (filtros = {}) => {
+  const params = new URLSearchParams();
+  Object.entries(filtros).forEach(([key, value]) => {
+    if (value && String(value).trim()) params.append(key, value);
+  });
+  const query = params.toString() ? `?${params.toString()}` : "";
   const response = await fetch(`${BASE_URL}/versions${query}`);
   return response.json();
 };
@@ -66,6 +70,16 @@ export const getVersionHistory = async (id) => {
   return response.json();
 };
 
+export const getDistinctChaves = async () => {
+  const response = await fetch(`${BASE_URL}/versions/chaves/distinct`);
+  return response.json();
+};
+
+export const getDistinctPlataformas = async () => {
+  const response = await fetch(`${BASE_URL}/versions/plataformas/distinct`);
+  return response.json();
+};
+
 export const createVersion = async (data) => {
   const token = localStorage.getItem("token");
   const response = await fetch(`${BASE_URL}/versions`, {
@@ -75,6 +89,46 @@ export const createVersion = async (data) => {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+export const getChaveConfigs = async () => {
+  const response = await fetch(`${BASE_URL}/chave-configs`);
+  return response.json();
+};
+
+export const createChaveConfig = async (data) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/chave-configs`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+export const updateChaveConfig = async (id, data) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/chave-configs/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+export const deleteChaveConfig = async (id) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/chave-configs/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
   });
   return response.json();
 };

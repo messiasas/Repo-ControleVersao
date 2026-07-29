@@ -6,6 +6,7 @@ import versionRoutes from "./routes/versionRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import logRoutes from "./routes/logRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import chaveConfigRoutes from "./routes/chaveConfigRoutes.js";
 
 const app = express();
 
@@ -16,9 +17,10 @@ app.use(cors({
 }));
 app.use(helmet()); 
 
-app.use("/versions", versionRoutes); 
+app.use("/versions", versionRoutes);
 app.use("/auth", authRoutes); // único endpoint, faz login e presumivelmente devolve um token/sessão.
 app.use("/logs", logRoutes);
 app.use("/users", userRoutes);
+app.use("/chave-configs", chaveConfigRoutes);
 
 export default app;

@@ -1,12 +1,12 @@
 import * as repo from "../repositories/versionRepository.js";
-import { VersionControl, AplicacaoVersao } from "../models/index.js";
+import { VersionControl, AplicacaoVersao, ChaveVersao } from "../models/index.js";
 import { createLog } from "./logServices.js";
 import { Op, fn, col, where as sequelizeWhere } from "sequelize";
 
-const allowedFilters = ["empresa", "modelo", "versao_so"];
+const allowedFilters = ["empresa", "modelo", "versao_so", "plataforma"];
 const allowedSortFields = ["empresa", "modelo", "versao_so", "createdAt"];
 
-const searchableFields = ["empresa", "modelo", "versao_so"];
+const searchableFields = ["empresa", "modelo", "versao_so", "plataforma"];
 
 export const getAll = async ({ page, limit, sort, order, search, filters }) => {
   const where = {};
@@ -52,7 +52,10 @@ export const getAll = async ({ page, limit, sort, order, search, filters }) => {
       where,
       order: orderClause,
       ...(safeLimit ? { limit: safeLimit, offset } : {}),
-      include: [{ model: AplicacaoVersao, as: "aplicacoes" }],
+      include: [
+        { model: AplicacaoVersao, as: "aplicacoes" },
+        { model: ChaveVersao, as: "chaves" },
+      ],
     }),
   ]);
 
@@ -85,4 +88,24 @@ export const remove = async (id, userId) => {
   const record = await repo.findById(id);
   await createLog(userId, "DELETE", id, record ? record.toJSON() : null);
   await repo.remove(id);
+};
+
+export const getDistinctChaves = async () => {
+  const rows = await ChaveVersao.findAll({
+    attributes: [[fn("DISTINCT", col("chave")), "chave"]],
+    where: { chave: { [Op.ne]: null } },
+    order: [["chave", "ASC"]],
+    raw: true,
+  });
+  return rows.map((r) => r.chave).filter((c) => c && c.trim());
+};
+
+export const getDistinctPlataformas = async () => {
+  const rows = await VersionControl.findAll({
+    attributes: [[fn("DISTINCT", col("plataforma")), "plataforma"]],
+    where: { plataforma: { [Op.ne]: null } },
+    order: [["plataforma", "ASC"]],
+    raw: true,
+  });
+  return rows.map((r) => r.plataforma).filter((p) => p && p.trim());
 };
