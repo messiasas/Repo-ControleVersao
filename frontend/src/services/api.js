@@ -93,6 +93,10 @@ export const createVersion = async (data) => {
   return response.json();
 };
 
+export const exportVersionExcelUrl = (id) => `${BASE_URL}/versions/${id}/export`;
+
+export const exportVersionPdfUrl = (id) => `${BASE_URL}/versions/${id}/export-pdf`;
+
 export const getChaveConfigs = async () => {
   const response = await fetch(`${BASE_URL}/chave-configs`);
   return response.json();
@@ -120,6 +124,14 @@ export const updateChaveConfig = async (id, data) => {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+export const getChaveConfigLogs = async () => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/chave-configs/logs`, {
+    headers: { Authorization: `Bearer ${token}` },
   });
   return response.json();
 };

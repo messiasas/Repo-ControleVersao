@@ -23,6 +23,24 @@ function AppNomeCell({ data }) {
   );
 }
 
+function AppVersaoCell({ data }) {
+  const apps = data?.aplicacoes;
+
+  if (!apps || apps.length === 0) return <span>—</span>;
+
+  if (apps.length === 1) return <span>{apps[0].versao || "—"}</span>;
+
+  function handleVer() {
+    openVersionView(data);
+  }
+
+  return (
+    <button className="ver-apps-btn" onClick={handleVer}>
+      Ver ({apps.length})
+    </button>
+  );
+}
+
 function ChaveCell({ data }) {
   const chaves = data?.chaves;
 
@@ -64,8 +82,9 @@ const columns = [
   {
     field: "aplicacoes_versao",
     headerName: "Versão APP",
-    filter: true,
+    cellRenderer: AppVersaoCell,
     valueGetter: (p) => (p.data?.aplicacoes || []).map((a) => a.versao).filter(Boolean).join(", "),
+    minWidth: 200,
   },
   { field: "versao_bt",  headerName: "Versão BT",    filter: true, minWidth: 300 },
   { field: "versao_wifi", headerName: "Wi-Fi",       filter: true, minWidth: 300 },

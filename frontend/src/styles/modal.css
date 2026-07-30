@@ -315,3 +315,123 @@
   padding: 8px 14px;
   font-size: 13px;
 }
+
+.modal-success {
+  background: #d1fae5;
+  border: 1px solid #6ee7b7;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #065f46;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.modal-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+}
+
+.modal-tab-btn {
+  padding: 10px 18px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.modal-tab-btn:hover {
+  color: #005C73;
+}
+
+.modal-tab-btn.active {
+  color: #005C73;
+  border-bottom-color: #005C73;
+}
+
+.chave-config-new-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 480px;
+}
+
+.chave-config-new-form .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.chave-history-section {
+  margin-top: 24px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+.chave-history-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.chave-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.chave-history-item {
+  font-size: 13px;
+  color: #4b5563;
+  background: #f9fafb;
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chave-history-item strong {
+  color: #1f2937;
+}
+
+.chave-history-meta {
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.chaves-section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chaves-total-badge {
+  font-size: 16px;
+  font-weight: 700;
+  color: #005C73;
+  text-transform: none;
+  letter-spacing: normal;
+  background: #e6f4f7;
+  padding: 6px 14px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chaves-total-value {
+  font-size: inherit;
+  font-weight: 800;
+  line-height: 1;
+}

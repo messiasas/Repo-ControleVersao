@@ -237,11 +237,6 @@ export default function EditVersionModal({ selectedRow, onClose, onSuccess }) {
               <input className="form-input" name="tipo_chaves" value={form.tipo_chaves ?? ""} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label>Qtd. Chaves</label>
-              <input className="form-input" type="number" name="qtd_chaves" value={form.qtd_chaves ?? 0} readOnly min="0" />
-              <span className="form-hint" style={{ margin: 0 }}>Calculado automaticamente a partir das chaves selecionadas abaixo.</span>
-            </div>
-            <div className="form-group">
               <label>Fonte</label>
               <input className="form-input" name="fonte" value={form.fonte ?? ""} onChange={handleChange} />
             </div>
@@ -295,7 +290,12 @@ export default function EditVersionModal({ selectedRow, onClose, onSuccess }) {
               </button>
             </div>
 
-            <div className="form-section-title">Chaves</div>
+            <div className="form-section-title chaves-section-title">
+              <span>Chaves</span>
+              <span className="chaves-total-badge">
+                Total de chaves: <span className="chaves-total-value">{form.qtd_chaves || 0}</span>
+              </span>
+            </div>
 
             <div className="aplicacoes-container">
               {chavesList.map((c, i) => (

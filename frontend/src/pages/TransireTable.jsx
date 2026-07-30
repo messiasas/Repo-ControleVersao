@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react"
-import {getVersions} from "../services/api.js"
+import {getVersions, exportVersionExcelUrl, exportVersionPdfUrl} from "../services/api.js"
 import Header from "../components/Header.jsx";
 import Filters from "../components/Filters.jsx"
 import Grid from "../components/Grid.jsx"
@@ -10,7 +10,7 @@ import { openVersionView } from "../utils/openVersionView.js";
 
 function TransireTable(){
     const [data, setData] = useState([]);
-    const [filtros, setFiltros] = useState({ empresa: "", modelo: "", plataforma: "" });
+    const [filtros, setFiltros] = useState({ empresa: "", equipamento: "", plataforma: "" });
     const [selectedRow, setSelectedRow] = useState(null);
     const [showSobre, setShowSobre] = useState(false);
 
@@ -62,18 +62,38 @@ function TransireTable(){
         setFiltros={setFiltros}
       />
 
-      <div className="bottom-toolbar bottom-toolbar--single">
+      <div className="bottom-toolbar">
+
+        <button
+          className={`pdf-export-button ${selectedRow ? "active" : ""}`}
+          disabled={!selectedRow}
+          onClick={() => {
+            if (selectedRow) {
+              window.open(exportVersionPdfUrl(selectedRow.id), "_blank");
+            }
+          }}>
+          PDF
+        </button>
 
         <button
           className={`apply-button ${selectedRow ? "active" : ""}`}
           onClick={() => {
-          console.log("Visualizar");
-
             if (selectedRow) {
               openVersionView(selectedRow);
             }
           }}>
           Visualizar
+        </button>
+
+        <button
+          className={`excel-export-button ${selectedRow ? "active" : ""}`}
+          disabled={!selectedRow}
+          onClick={() => {
+            if (selectedRow) {
+              window.open(exportVersionExcelUrl(selectedRow.id), "_blank");
+            }
+          }}>
+          Excel
         </button>
 
       </div>

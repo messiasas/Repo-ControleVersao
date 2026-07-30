@@ -14,7 +14,7 @@ import { openVersionView } from "../utils/openVersionView.js";
 
 function Admin() {
   const [data, setData] = useState([]);
-  const [filtros, setFiltros] = useState({ empresa: "", modelo: "", plataforma: "" });
+  const [filtros, setFiltros] = useState({ empresa: "", equipamento: "", plataforma: "" });
   const [selectedRow, setSelectedRow] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);
@@ -117,7 +117,7 @@ function Admin() {
               Configurações
             </button>
 
-            <button className="new-package-button" onClick={() => setShowChaveConfig(true)}>
+            <button className="chave-config-button" onClick={() => setShowChaveConfig(true)}>
               Configurar chaves
             </button>
           </div>

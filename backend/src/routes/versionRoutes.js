@@ -10,6 +10,8 @@ const router = express.Router();
 router.get("/", controller.getAll);
 router.get("/chaves/distinct", controller.getDistinctChaves);
 router.get("/plataformas/distinct", controller.getDistinctPlataformas);
+router.get("/:id/export", controller.exportExcel);
+router.get("/:id/export-pdf", controller.exportPdf);
 
 /*o Express as trata como uma corrida em cadeia: chama a primeira, e só chama a segunda se a primeira invocar next(). 
 Se uma delas responder (res.status(...).json(...)) sem chamar next(), a corrente para ali — as funções seguintes (incluindo o controller) nunca rodam.*/

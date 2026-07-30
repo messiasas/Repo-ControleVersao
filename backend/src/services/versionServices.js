@@ -3,7 +3,7 @@ import { VersionControl, AplicacaoVersao, ChaveVersao } from "../models/index.js
 import { createLog } from "./logServices.js";
 import { Op, fn, col, where as sequelizeWhere } from "sequelize";
 
-const allowedFilters = ["empresa", "modelo", "versao_so", "plataforma"];
+const allowedFilters = ["empresa", "equipamento", "versao_so", "plataforma"];
 const allowedSortFields = ["empresa", "modelo", "versao_so", "createdAt"];
 
 const searchableFields = ["empresa", "modelo", "versao_so", "plataforma"];

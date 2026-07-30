@@ -24,13 +24,13 @@ export default function Filters({ filtros, setFiltros, theme = "transire" }) {
           />
         </div>
         <div className="search-group">
-          <label className="search-label" htmlFor="busca-modelo">Modelo</label>
+          <label className="search-label" htmlFor="busca-equipamento">Equipamento</label>
           <input
-            id="busca-modelo"
+            id="busca-equipamento"
             className="search-space"
-            placeholder="Busque por modelo"
-            value={filtros.modelo}
-            onChange={(e) => handleChange("modelo", e.target.value)}
+            placeholder="Busque por equipamento"
+            value={filtros.equipamento}
+            onChange={(e) => handleChange("equipamento", e.target.value)}
           />
         </div>
         <div className="search-group">

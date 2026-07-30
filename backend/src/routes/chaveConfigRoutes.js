@@ -7,6 +7,7 @@ import { validate } from "../middlewares/validate.js";
 const router = express.Router();
 
 router.get("/", controller.getAll);
+router.get("/logs", authMiddleware, isAdmin, controller.getLogs);
 router.post("/", authMiddleware, isAdmin, validate(chaveConfigSchema), controller.create);
 router.put("/:id", authMiddleware, isAdmin, validate(chaveConfigUpdateSchema), controller.update);
 router.delete("/:id", authMiddleware, isAdmin, controller.remove);

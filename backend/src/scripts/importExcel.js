@@ -2,23 +2,30 @@ import XLSX from "xlsx";
 import path from "path";
 import { fileURLToPath } from "url";
 import sequelize from "../config/database.js";
-import { VersionControl, AplicacaoVersao, ChaveVersao } from "../models/index.js";
+import { VersionControl, AplicacaoVersao, ChaveVersao, ChaveConfig } from "../models/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CAMINHO_PLANILHA = path.join(__dirname, "../data/ENVIO PAG.xlsx");
 
+// Mapeamento das colunas da planilha para os campos do VersionControl.
+// "Quantidade de chaves" não entra aqui: seu valor é usado só para validar
+// contra o total calculado a partir das chaves (ver calcularTotalChaves).
 const MAPA_VERSAO = {
   "Empresa":                "empresa",
   "Equipamento":            "equipamento",
+  "Plataforma":             "plataforma",
   "Modelo":                 "modelo",
+  "FW":                     "fw",
+  "SPHS":                   "sphs",
+  "Firmware version":       "firmware_version",
   "Versão S.O.":            "versao_so",
-  "BOOT / FIRMWARE VERSION":"firmware",
+  "Security Version(SV)":   "security_version",
+  "BOOT":                   "firmware",
   "PUK (CRC)":              "puk_crc",
   "Versão Módulo BT":       "versao_bt",
   "Versão Módulo WIFI":     "versao_wifi",
   "Versão Módulo GPRS":     "versao_gprs",
   "Possui logo":            "possui_logo",
-  "Quantidade de chaves":   "qtd_chaves",
   "Configurador":           "configurador",
   "Fonte":                  "fonte",
   "Tipo das chaves":        "tipo_chaves",
@@ -48,6 +55,34 @@ function extrairChaves(linha) {
   const bruto = linha["Chaves"];
   if (typeof bruto !== "string") return [];
   return bruto.split(/[,;\n]/).map((v) => v.trim()).filter(Boolean);
+}
+
+function normalizarNomeChave(nome) {
+  return nome.trim().toLowerCase();
+}
+
+function buildConfigMap(configs) {
+  const map = new Map();
+  for (const config of configs) {
+    map.set(normalizarNomeChave(config.nome), config);
+  }
+  return map;
+}
+
+// Soma DUKPT + Master Key de cada chave do pacote (mesma regra usada no
+// front ao calcular "Total de chaves"). Chaves sem configuração cadastrada
+// contam 0 e são reportadas para o admin poder investigar.
+function calcularTotalChaves(chaves, configMap) {
+  const chavesSemConfig = [];
+  const total = chaves.reduce((soma, nomeChave) => {
+    const config = configMap.get(normalizarNomeChave(nomeChave));
+    if (!config) {
+      chavesSemConfig.push(nomeChave);
+      return soma;
+    }
+    return soma + (Number(config.qtd_dukpt) || 0) + (Number(config.qtd_master_key) || 0);
+  }, 0);
+  return { total, chavesSemConfig };
 }
 
 // Agrupa linhas: uma linha com Equipamento/Modelo preenchido inicia um novo
@@ -84,7 +119,10 @@ async function importar() {
   const pacotes = agrupar(rows);
   console.log(`Encontrados ${pacotes.length} pacotes na planilha.`);
 
+  const configMap = buildConfigMap(await ChaveConfig.findAll());
+
   let importados = 0;
+  const rejeitados = [];
 
   for (const { linha, aplicacoes } of pacotes) {
     const dadosVersao = {};
@@ -93,6 +131,27 @@ async function importar() {
     }
 
     const chaves = extrairChaves(linha);
+    const qtdPlanilha = normalizar(linha["Quantidade de chaves"], "qtd_chaves");
+    const { total: totalCalculado, chavesSemConfig } = calcularTotalChaves(chaves, configMap);
+
+    if (qtdPlanilha != null && qtdPlanilha !== totalCalculado) {
+      rejeitados.push({
+        empresa: dadosVersao.empresa,
+        equipamento: dadosVersao.equipamento,
+        chaves,
+        qtdPlanilha,
+        totalCalculado,
+        chavesSemConfig,
+      });
+      console.warn(
+        `  [REJEITADO] ${dadosVersao.empresa} / ${dadosVersao.equipamento} — planilha diz ${qtdPlanilha} chave(s), ` +
+        `mas o cálculo a partir de "${chaves.join(", ")}" deu ${totalCalculado}` +
+        (chavesSemConfig.length > 0 ? ` (sem configuração cadastrada: ${chavesSemConfig.join(", ")})` : "")
+      );
+      continue;
+    }
+
+    dadosVersao.qtd_chaves = totalCalculado;
 
     const record = await VersionControl.create(dadosVersao);
 
@@ -125,6 +184,13 @@ async function importar() {
   }
 
   console.log(`\nConcluído: ${importados} pacote(s) importado(s).`);
+  if (rejeitados.length > 0) {
+    console.log(`${rejeitados.length} pacote(s) rejeitado(s) por divergência na quantidade de chaves:`);
+    for (const r of rejeitados) {
+      console.log(`  - ${r.empresa} / ${r.equipamento}: planilha=${r.qtdPlanilha}, calculado=${r.totalCalculado}, chaves=[${r.chaves.join(", ")}]`);
+    }
+  }
+
   process.exit();
 }
 

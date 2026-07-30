@@ -1,8 +1,6 @@
 .version-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    align-content: start;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
 
     gap: 16px;
 
@@ -27,6 +25,27 @@
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease;
+
+    width: 100%;
+}
+
+/* Janela expandida/maximizada: cards ficam lado a lado numa única linha
+   horizontal, alinhados no topo, para nenhum ficar "escondido" embaixo de
+   outro maior. Na largura original (popup estreito à direita), os cards
+   continuam em pilha vertical (regra acima). */
+@media (min-width: 700px) {
+    .version-container {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        overflow-x: auto;
+    }
+
+    .info-card {
+        flex: 1 1 320px;
+        min-width: 320px;
+        width: auto;
+    }
 }
 
 .info-card:hover {
