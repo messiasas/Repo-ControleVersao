@@ -48,16 +48,9 @@ function VersionView() {
             </div>
 
             <div className="info-row">
-                <span className="info-label">Chaves</span>
+                <span className="info-label">Data de criação</span>
                 <span className="info-value">
-                    {versionData?.chaves?.length > 0 ? "Sim" : "Não"}
-                </span>
-            </div>
-
-            <div className="info-row">
-                <span className="info-label">Qtd chaves</span>
-                <span className="info-value">
-                    {versionData?.qtd_chaves}
+                    {versionData?.createdAt ? new Date(versionData.createdAt).toLocaleString("pt-BR") : "—"}
                 </span>
             </div>
 
@@ -68,12 +61,7 @@ function VersionView() {
             <h2>Equipamento</h2>
 
             <div className="info-row">
-                <span className="info-label">Modelo</span>
-                <span className="info-value">{versionData?.modelo}</span>
-            </div>
-
-            <div className="info-row">
-                <span className="info-label">Tipo</span>
+                <span className="info-label">Equipamento</span>
                 <span className="info-value">{versionData?.equipamento}</span>
             </div>
 
@@ -83,18 +71,8 @@ function VersionView() {
             </div>
 
             <div className="info-row">
-                <span className="info-label">FW</span>
-                <span className="info-value">{versionData?.fw}</span>
-            </div>
-
-            <div className="info-row">
-                <span className="info-label">SPHS</span>
-                <span className="info-value">{versionData?.sphs}</span>
-            </div>
-
-            <div className="info-row">
-                <span className="info-label">Firmware version</span>
-                <span className="info-value">{versionData?.firmware_version}</span>
+                <span className="info-label">Modelo</span>
+                <span className="info-value">{versionData?.modelo}</span>
             </div>
 
         </div>
@@ -109,8 +87,8 @@ function VersionView() {
             </div>
 
             <div className="info-row">
-                <span className="info-label">Security Version(SV)</span>
-                <span className="info-value">{versionData?.security_version}</span>
+                <span className="info-label">Firmware version</span>
+                <span className="info-value">{versionData?.firmware_version}</span>
             </div>
 
             <div className="info-row">
@@ -118,57 +96,14 @@ function VersionView() {
                 <span className="info-value">{versionData?.firmware}</span>
             </div>
 
-            <div className="apps-section">
-                <div className="apps-header">
-                    <span className="info-label">Aplicações</span>
-                    {versionData?.aplicacoes?.length > 0 && (
-                        <div className="apps-toggle">
-                            <button
-                                className={`toggle-btn${appsMode === "texto" ? " active" : ""}`}
-                                onClick={() => setAppsMode("texto")}
-                            >Texto</button>
-                            <button
-                                className={`toggle-btn${appsMode === "grade" ? " active" : ""}`}
-                                onClick={() => setAppsMode("grade")}
-                            >Grade</button>
-                        </div>
-                    )}
-                </div>
-                {versionData?.aplicacoes?.length > 0 ? (
-                    appsMode === "grade" ? (
-                        <div className="apps-table-wrapper">
-                            <table className="apps-table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nome</th>
-                                        <th>Versão</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {versionData.aplicacoes.map((a, i) => (
-                                        <tr key={i}>
-                                            <td>{i + 1}</td>
-                                            <td>{a.nome || "—"}</td>
-                                            <td>{a.versao || "—"}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : (
-                        <ul className="apps-text-list">
-                            {versionData.aplicacoes.map((a, i) => (
-                                <li key={i}>{a.nome || "—"} - {a.versao || "—"}</li>
-                            ))}
-                        </ul>
-                    )
-                ) : <span className="info-value">—</span>}
+            <div className="info-row">
+                <span className="info-label">FW</span>
+                <span className="info-value">{versionData?.fw}</span>
             </div>
 
             <div className="info-row">
-                <span className="info-label">Configurador</span>
-                <span className="info-value">{versionData?.configurador}</span>
+                <span className="info-label">SPHS</span>
+                <span className="info-value">{versionData?.sphs}</span>
             </div>
 
         </div>
@@ -190,6 +125,24 @@ function VersionView() {
             <div className="info-row">
                 <span className="info-label">GPRS</span>
                 <span className="info-value">{versionData?.versao_gprs}</span>
+            </div>
+
+        </div>
+
+        <div className="info-card">
+
+            <h2>Segurança</h2>
+
+            <div className="info-row">
+                <span className="info-label">PUK/CRC</span>
+                <span className="info-value">
+                    {versionData?.puk_crc}
+                </span>
+            </div>
+
+            <div className="info-row">
+                <span className="info-label">Security Version(SV)</span>
+                <span className="info-value">{versionData?.security_version}</span>
             </div>
 
         </div>
@@ -245,13 +198,6 @@ function VersionView() {
             </div>
 
             <div className="info-row">
-                <span className="info-label">Qtd chaves</span>
-                <span className="info-value">
-                    {versionData?.qtd_chaves}
-                </span>
-            </div>
-
-            <div className="info-row">
                 <span className="info-label">Total DUKPT</span>
                 <span className="info-value">
                     {totalDukpt}
@@ -266,6 +212,13 @@ function VersionView() {
             </div>
 
             <div className="info-row">
+                <span className="info-label">Qtd chaves</span>
+                <span className="info-value">
+                    {versionData?.qtd_chaves}
+                </span>
+            </div>
+
+            <div className="info-row">
                 <span className="info-label">Tipo</span>
                 <span className="info-value">
                     {versionData?.tipo_chaves}
@@ -273,23 +226,8 @@ function VersionView() {
             </div>
 
             <div className="info-row">
-                <span className="info-label">PUK CRC</span>
-                <span className="info-value">
-                    {versionData?.puk_crc}
-                </span>
-            </div>
-
-        </div>
-
-        <div className="info-card">
-
-            <h2>Personalização</h2>
-
-            <div className="info-row">
-                <span className="info-label">Possui Logo</span>
-                <span className="info-value">
-                    {versionData?.possui_logo ? "Sim" : "Não"}
-                </span>
+                <span className="info-label">Configurador</span>
+                <span className="info-value">{versionData?.configurador}</span>
             </div>
 
             <div className="info-row">
@@ -300,10 +238,10 @@ function VersionView() {
             </div>
 
         </div>
-    
+
         <div className="info-card">
 
-            <h2>Histórico</h2>
+            <h2>Aplicações e personalização</h2>
 
             <div className="info-row">
                 <span className="info-label">Possui Logo</span>
@@ -312,11 +250,52 @@ function VersionView() {
                 </span>
             </div>
 
-            <div className="info-row">
-                <span className="info-label">Fonte</span>
-                <span className="info-value">
-                    {versionData?.fonte}
-                </span>
+            <div className="apps-section">
+                <div className="apps-header">
+                    <span className="info-label">Aplicações</span>
+                    {versionData?.aplicacoes?.length > 0 && (
+                        <div className="apps-toggle">
+                            <button
+                                className={`toggle-btn${appsMode === "texto" ? " active" : ""}`}
+                                onClick={() => setAppsMode("texto")}
+                            >Texto</button>
+                            <button
+                                className={`toggle-btn${appsMode === "grade" ? " active" : ""}`}
+                                onClick={() => setAppsMode("grade")}
+                            >Grade</button>
+                        </div>
+                    )}
+                </div>
+                {versionData?.aplicacoes?.length > 0 ? (
+                    appsMode === "grade" ? (
+                        <div className="apps-table-wrapper">
+                            <table className="apps-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nome</th>
+                                        <th>Versão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {versionData.aplicacoes.map((a, i) => (
+                                        <tr key={i}>
+                                            <td>{i + 1}</td>
+                                            <td>{a.nome || "—"}</td>
+                                            <td>{a.versao || "—"}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <ul className="apps-text-list">
+                            {versionData.aplicacoes.map((a, i) => (
+                                <li key={i}>{a.nome || "—"} - {a.versao || "—"}</li>
+                            ))}
+                        </ul>
+                    )
+                ) : <span className="info-value">—</span>}
             </div>
 
         </div>

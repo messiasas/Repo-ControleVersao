@@ -70,11 +70,11 @@ function garantirEspaco(doc, alturaNecessaria) {
 }
 
 function tituloSecao(doc, texto) {
-  garantirEspaco(doc, 30);
-  doc.moveDown(0.6);
+  garantirEspaco(doc, 26);
+  doc.moveDown(0.4);
   doc
     .font("Helvetica-Bold")
-    .fontSize(12)
+    .fontSize(11)
     .fillColor(COR_SECAO)
     .text(texto, MARGEM, doc.y);
   const y = doc.y + 2;
@@ -84,53 +84,81 @@ function tituloSecao(doc, texto) {
     .strokeColor(COR_LINHA)
     .lineWidth(1)
     .stroke();
-  doc.moveDown(0.5);
+  doc.y = y + 6;
 }
 
-function linhaCampo(doc, label, valor) {
-  garantirEspaco(doc, 18);
-  const texto = valor != null && valor !== "" ? String(valor) : "—";
+const GRADE_GAP = 8;
+const GRADE_PAD_X = 7;
+const GRADE_PAD_Y = 5;
+const GRADE_LABEL_VALOR_GAP = 2;
 
-  doc
-    .font("Helvetica-Bold")
-    .fontSize(10)
-    .fillColor(COR_LABEL)
-    .text(`${label}:`, MARGEM, doc.y, { continued: true, width: larguraUtil(doc) });
-
-  doc
-    .font("Helvetica")
-    .fontSize(10)
-    .fillColor(COR_VALOR)
-    .text(`  ${texto}`);
-
-  doc.moveDown(0.2);
-}
-
-function linhaLista(doc, texto) {
-  garantirEspaco(doc, 16);
-  doc
-    .font("Helvetica")
-    .fontSize(10)
-    .fillColor(COR_VALOR)
-    .text(`•  ${texto}`, MARGEM + 10, doc.y, { width: larguraUtil(doc) - 10 });
-  doc.moveDown(0.15);
-}
-
-function secaoCampos(doc, titulo, dados, campos) {
-  tituloSecao(doc, titulo);
-  for (const [label, campo] of campos) {
-    linhaCampo(doc, label, dados[campo]);
-  }
-}
-
-function secaoLista(doc, titulo, itens) {
-  tituloSecao(doc, titulo);
-  if (!itens || itens.length === 0) {
-    doc.font("Helvetica-Oblique").fontSize(10).fillColor(COR_MUTED).text("—", MARGEM);
-    doc.moveDown(0.2);
+// Renderiza uma lista de pares {label, valor} em um grid de cartões,
+// preenchendo a largura útil da página em `colunas` colunas por linha.
+function grade(doc, pares, colunas) {
+  if (!pares || pares.length === 0) {
+    doc.font("Helvetica-Oblique").fontSize(9).fillColor(COR_MUTED).text("—", MARGEM);
+    doc.moveDown(0.3);
     return;
   }
-  itens.forEach((item) => linhaLista(doc, item));
+
+  const largura = larguraUtil(doc);
+  const colWidth = (largura - GRADE_GAP * (colunas - 1)) / colunas;
+  const innerWidth = colWidth - GRADE_PAD_X * 2;
+
+  for (let i = 0; i < pares.length; i += colunas) {
+    const linha = pares.slice(i, i + colunas);
+
+    doc.font("Helvetica-Bold").fontSize(7.5);
+    const alturaLabel = Math.max(
+      ...linha.map((par) => doc.heightOfString(par.label.toUpperCase(), { width: innerWidth }))
+    );
+
+    doc.font("Helvetica").fontSize(9);
+    const alturaValor = Math.max(
+      ...linha.map((par) => doc.heightOfString(par.valor, { width: innerWidth }))
+    );
+
+    const alturaCelula = GRADE_PAD_Y * 2 + alturaLabel + GRADE_LABEL_VALOR_GAP + alturaValor;
+
+    garantirEspaco(doc, alturaCelula + 6);
+    const y = doc.y;
+
+    linha.forEach((par, idx) => {
+      const x = MARGEM + idx * (colWidth + GRADE_GAP);
+
+      doc.rect(x, y, colWidth, alturaCelula).fillAndStroke("#f9fafb", COR_LINHA);
+
+      doc
+        .font("Helvetica-Bold")
+        .fontSize(7.5)
+        .fillColor(COR_LABEL)
+        .text(par.label.toUpperCase(), x + GRADE_PAD_X, y + GRADE_PAD_Y, { width: innerWidth });
+
+      doc
+        .font("Helvetica")
+        .fontSize(9)
+        .fillColor(COR_VALOR)
+        .text(par.valor, x + GRADE_PAD_X, y + GRADE_PAD_Y + alturaLabel + GRADE_LABEL_VALOR_GAP, {
+          width: innerWidth,
+        });
+    });
+
+    doc.y = y + alturaCelula + 6;
+  }
+}
+
+function secaoCampos(doc, titulo, dados, campos, colunas = 3) {
+  tituloSecao(doc, titulo);
+  const pares = campos.map(([label, campo]) => {
+    const bruto = dados[campo];
+    return { label, valor: bruto != null && bruto !== "" ? String(bruto) : "—" };
+  });
+  grade(doc, pares, colunas);
+}
+
+function secaoLista(doc, titulo, pares, colunas = 2) {
+  tituloSecao(doc, titulo);
+  grade(doc, pares, colunas);
 }
 
 export async function buildVersionPdf(version) {
@@ -177,24 +205,26 @@ export async function buildVersionPdf(version) {
     .stroke();
   doc.moveDown(1);
 
-  secaoCampos(doc, "Identificação", version, IDENTIFICACAO_FIELDS);
-  secaoCampos(doc, "Versões de software", version, VERSOES_FIELDS);
-  secaoCampos(doc, "Conectividade", version, CONECTIVIDADE_FIELDS);
-  secaoCampos(doc, "Segurança", version, SEGURANCA_FIELDS);
-  secaoCampos(doc, "Personalização", version, PERSONALIZACAO_FIELDS);
+  secaoCampos(doc, "Identificação", version, IDENTIFICACAO_FIELDS, 4);
+  secaoCampos(doc, "Versões de software", version, VERSOES_FIELDS, 4);
+  secaoCampos(doc, "Conectividade", version, CONECTIVIDADE_FIELDS, 3);
+  secaoCampos(doc, "Segurança", version, SEGURANCA_FIELDS, 3);
+  secaoCampos(doc, "Personalização", version, PERSONALIZACAO_FIELDS, 2);
 
   const aplicacoes = version.aplicacoes || [];
   secaoLista(
     doc,
     "Aplicações",
-    aplicacoes.map((a) => `${a.nome || "—"} — ${a.versao || "—"}`)
+    aplicacoes.map((a) => ({ label: a.nome || "Aplicação", valor: a.versao || "—" })),
+    3
   );
 
   const chaves = version.chaves || [];
   secaoLista(
     doc,
     "Chaves",
-    chaves.map((c) => c.chave || "—")
+    chaves.map((c, i) => ({ label: `Chave ${i + 1}`, valor: c.chave || "—" })),
+    2
   );
 
   doc.end();
