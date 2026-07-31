@@ -41,10 +41,10 @@ function VersionView() {
     <div className="version-container">
 
         <div className="info-card">
-            <h2>Empresa</h2>
+            <h2>Pacote</h2>
 
             <div className="info-row">
-                <span className="info-value">{versionData?.empresa}</span>
+                <span className="info-value">{versionData?.pacote}</span>
             </div>
 
             <div className="info-row">

@@ -24,26 +24,28 @@ export const getPackagesWithHistory = async (req, res) => {
 
     const existing = await VersionControl.findAll({
       where: { id: { [Op.in]: recordIds } },
-      attributes: ["id", "empresa", "equipamento"],
+      attributes: ["id", "pacote", "equipamento"],
     });
     const existingMap = new Map(existing.map((p) => [p.id, p]));
 
     const result = latestLogs.map((log) => {
       const pkg = existingMap.get(log.record_id);
-      let empresa = pkg?.empresa;
+      let pacote = pkg?.pacote;
       let equipamento = pkg?.equipamento;
 
       if (!pkg && log.details) {
         try {
           const details = JSON.parse(log.details);
-          empresa = details.empresa;
+          // "empresa" é o nome antigo do campo, mantido aqui só para logs
+          // gravados antes da renomeação para "pacote" continuarem legíveis.
+          pacote = details.pacote ?? details.empresa;
           equipamento = details.equipamento;
         } catch (_) {}
       }
 
       return {
         id: log.record_id,
-        empresa: empresa || "—",
+        pacote: pacote || "—",
         equipamento: equipamento || "—",
         updatedAt: log.createdAt,
         lastEditor: log.user?.email || "—",

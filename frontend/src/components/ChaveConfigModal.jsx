@@ -52,6 +52,8 @@ export default function ChaveConfigModal({ onClose }) {
   const [tab, setTab] = useState("existentes");
   const [chaves, setChaves] = useState([]);
   const [logs, setLogs] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [novaChave, setNovaChave] = useState({ ...EMPTY_NOVA_CHAVE });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -91,6 +93,14 @@ export default function ChaveConfigModal({ onClose }) {
     setChaves((prev) => prev.map((c) => (c.id === id ? { ...c, [field]: value } : c)));
   }
 
+  function handleSearch() {
+    setSearchTerm(searchInput.trim().toLowerCase());
+  }
+
+  const filteredChaves = searchTerm
+    ? chaves.filter((c) => (c.nome ?? "").toLowerCase().includes(searchTerm))
+    : chaves;
+
   function requestSave(chave) {
     setAuthTarget(chave);
     setConfirmEmail("");
@@ -116,7 +126,7 @@ export default function ChaveConfigModal({ onClose }) {
 
       const chave = authTarget;
       const res = await updateChaveConfig(chave.id, {
-        nome: chave.nome,
+        nome: chave.nome.trim().toUpperCase(),
         qtd_dukpt: chave.qtd_dukpt !== "" ? Number(chave.qtd_dukpt) : 0,
         qtd_master_key: chave.qtd_master_key !== "" ? Number(chave.qtd_master_key) : 0,
       });
@@ -191,7 +201,7 @@ export default function ChaveConfigModal({ onClose }) {
     setError("");
     try {
       const res = await createChaveConfig({
-        nome: novaChave.nome,
+        nome: novaChave.nome.trim().toUpperCase(),
         qtd_dukpt: novaChave.qtd_dukpt !== "" ? Number(novaChave.qtd_dukpt) : 0,
         qtd_master_key: novaChave.qtd_master_key !== "" ? Number(novaChave.qtd_master_key) : 0,
       });
@@ -245,6 +255,19 @@ export default function ChaveConfigModal({ onClose }) {
 
           {tab === "existentes" ? (
             <>
+              <div className="chave-config-search">
+                <input
+                  className="form-input"
+                  placeholder="Buscar chave existente..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+                <button type="button" className="modal-btn-submit" onClick={handleSearch}>
+                  Buscar
+                </button>
+              </div>
+
               <div className="chave-config-table-wrapper">
                 <table className="chave-config-table">
                   <thead>
@@ -257,7 +280,7 @@ export default function ChaveConfigModal({ onClose }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {chaves.map((c) => (
+                    {filteredChaves.map((c) => (
                       <tr key={c.id}>
                         <td>
                           <input
@@ -297,10 +320,10 @@ export default function ChaveConfigModal({ onClose }) {
                         </td>
                       </tr>
                     ))}
-                    {chaves.length === 0 && (
+                    {filteredChaves.length === 0 && (
                       <tr>
                         <td colSpan={5} style={{ textAlign: "center", color: "#9ca3af", padding: "16px 0" }}>
-                          Nenhuma chave cadastrada.
+                          {chaves.length === 0 ? "Nenhuma chave cadastrada." : "Nenhuma chave encontrada."}
                         </td>
                       </tr>
                     )}

@@ -3,7 +3,7 @@ import { getVersionHistory } from "../services/api.js";
 import "../styles/historico.css";
 
 const FIELD_LABELS = {
-  empresa:      "Empresa",
+  pacote:       "Pacote",
   equipamento:  "Equipamento",
   modelo:       "Modelo",
   plataforma:   "Plataforma",
@@ -65,7 +65,7 @@ export default function HistoricoDetalhe({ pkg }) {
     <div className="historico-detalhe-container">
       <div className="historico-detalhe-header">
         <span className="historico-detalhe-title">
-          {pkg.empresa} — {pkg.equipamento}
+          {pkg.pacote} — {pkg.equipamento}
         </span>
       </div>
 

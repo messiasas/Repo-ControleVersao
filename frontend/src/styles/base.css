@@ -15,4 +15,9 @@ body {
   --color-text: #ffffff;
   --header-height: 50px;
   --spacing: 16px;
+  --bottom-toolbar-height: 75px;
+}
+
+.app-container {
+  padding-bottom: calc(var(--bottom-toolbar-height) + 20px);
 }

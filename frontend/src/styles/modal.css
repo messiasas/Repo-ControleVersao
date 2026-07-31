@@ -269,6 +269,16 @@
   line-height: 1.5;
 }
 
+.chave-config-search {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.chave-config-search .form-input {
+  flex: 1;
+}
+
 .chave-config-table-wrapper {
   overflow-x: auto;
 }

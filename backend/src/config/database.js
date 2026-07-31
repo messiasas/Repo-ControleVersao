@@ -12,7 +12,7 @@ const sequelize = new Sequelize({
 
     dialect: "mysql",
     logging: console.log, /* Usamos para depurar cada requição feita na aplicação, como a busca de um registro */
-                        /* Podemos ver esses logs no cmd assim quando buscamos algo, como por exemplo  SELECT `id`, `empresa`, `equipamento`, ... FROM `VersionControls` AS `VersionControl` WHERE ... */
+                        /* Podemos ver esses logs no cmd assim quando buscamos algo, como por exemplo  SELECT `id`, `pacote`, `equipamento`, ... FROM `VersionControls` AS `VersionControl` WHERE ... */
                         /* Podemos fazer uma alteração no futuro para nao termos esses logs em produção, podendo usar somente quando no perfil de dev */
     },
 );

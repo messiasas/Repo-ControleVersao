@@ -60,7 +60,7 @@ function ChaveCell({ data }) {
 }
 
 const columns = [
-  { field: "empresa",    rowGroup: true, headerName: "Empresa", filter: true, minWidth: 200 },
+  { field: "pacote",     rowGroup: true, headerName: "Pacote", filter: true, minWidth: 200 },
   { field: "equipamento", filter: true, minWidth: 200 },
   { field: "plataforma", headerName: "Plataforma", filter: true, minWidth: 180 },
   { field: "modelo",     rowGroup: true, headerName: "Modelo", filter: true, minWidth: 180 },
@@ -122,7 +122,7 @@ const columns = [
 ];
 
 const autoGroupColumnDef = {
-  headerName: "Empresa / Modelo",
+  headerName: "Pacote / Modelo",
   minWidth: 260,
   cellRendererParams: { suppressCount: false },
 };

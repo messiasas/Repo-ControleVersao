@@ -8,6 +8,11 @@
   gap: 20px;
 }
 
+.toolbar-amazonas {
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
 .toolbar input {
   padding: 8px 12px;
   border-radius: 8px;

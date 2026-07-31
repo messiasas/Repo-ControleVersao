@@ -11,7 +11,7 @@ export default function Filters({ filtros, setFiltros, theme = "transire" }) {
   }
 
   return (
-    <div className="toolbar">
+    <div className={`toolbar${theme === "amazonas" ? " toolbar-amazonas" : ""}`}>
       <div className="search-fields">
         <div className="search-group">
           <label className="search-label" htmlFor="busca-cliente">Cliente</label>
@@ -19,8 +19,8 @@ export default function Filters({ filtros, setFiltros, theme = "transire" }) {
             id="busca-cliente"
             className="search-space"
             placeholder="Busque por cliente"
-            value={filtros.empresa}
-            onChange={(e) => handleChange("empresa", e.target.value)}
+            value={filtros.pacote}
+            onChange={(e) => handleChange("pacote", e.target.value)}
           />
         </div>
         <div className="search-group">

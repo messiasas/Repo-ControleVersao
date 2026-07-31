@@ -13,7 +13,7 @@ const chaveItem = Joi.object({
 uma atualização pode mandar só o campo que mudou, sem precisar reenviar tudo. */
 
 export const versionUpdateSchema = Joi.object({
-  empresa: Joi.string().optional(),
+  pacote: Joi.string().optional(),
   equipamento: Joi.string().optional(),
 
   modelo: Joi.string().optional(),
@@ -46,7 +46,7 @@ export const versionUpdateSchema = Joi.object({
 });
 
 export const versionSchema = Joi.object({
-  empresa: Joi.string().required(),
+  pacote: Joi.string().required(),
   equipamento: Joi.string().required(),
 
   modelo: Joi.string().required(),

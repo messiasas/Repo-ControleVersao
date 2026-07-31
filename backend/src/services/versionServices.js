@@ -3,10 +3,10 @@ import { VersionControl, AplicacaoVersao, ChaveVersao } from "../models/index.js
 import { createLog } from "./logServices.js";
 import { Op, fn, col, where as sequelizeWhere } from "sequelize";
 
-const allowedFilters = ["empresa", "equipamento", "versao_so", "plataforma"];
-const allowedSortFields = ["empresa", "modelo", "versao_so", "createdAt"];
+const allowedFilters = ["pacote", "equipamento", "versao_so", "plataforma"];
+const allowedSortFields = ["pacote", "modelo", "versao_so", "createdAt"];
 
-const searchableFields = ["empresa", "modelo", "versao_so", "plataforma"];
+const searchableFields = ["pacote", "modelo", "versao_so", "plataforma"];
 
 export const getAll = async ({ page, limit, sort, order, search, filters }) => {
   const where = {};

@@ -14,7 +14,7 @@ import { openVersionView } from "../utils/openVersionView.js";
 
 function Admin() {
   const [data, setData] = useState([]);
-  const [filtros, setFiltros] = useState({ empresa: "", equipamento: "", plataforma: "" });
+  const [filtros, setFiltros] = useState({ pacote: "", equipamento: "", plataforma: "" });
   const [selectedRow, setSelectedRow] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);

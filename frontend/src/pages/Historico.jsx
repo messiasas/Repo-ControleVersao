@@ -15,7 +15,7 @@ export default function Historico({ onSelectPackage }) {
   }, []);
 
   const filtered = packages.filter((pkg) =>
-    (pkg.empresa || "").toLowerCase().includes(search.toLowerCase())
+    (pkg.pacote || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -25,7 +25,7 @@ export default function Historico({ onSelectPackage }) {
         <input
           className="historico-search"
           type="text"
-          placeholder="Buscar empresa..."
+          placeholder="Buscar pacote..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -40,7 +40,7 @@ export default function Historico({ onSelectPackage }) {
           <thead>
             <tr>
               <th>#</th>
-              <th>Empresa</th>
+              <th>Pacote</th>
               <th>Equipamento</th>
               <th>Última atualização</th>
               <th>Responsável</th>
@@ -51,7 +51,7 @@ export default function Historico({ onSelectPackage }) {
               <tr key={pkg.id} className={`historico-row${pkg.deleted ? " historico-row--deleted" : ""}`} onClick={() => onSelectPackage(pkg)}>
                 <td>{i + 1}</td>
                 <td>
-                  {pkg.empresa || "—"}
+                  {pkg.pacote || "—"}
                   {pkg.deleted && <span className="badge-excluido">Excluído</span>}
                 </td>
                 <td>{pkg.equipamento || "—"}</td>

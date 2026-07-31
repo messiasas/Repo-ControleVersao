@@ -3,7 +3,7 @@ import sequelize from "../config/database.js";
 
 const VersionControl = sequelize.define("VersionControl",
 {
-    empresa: DataTypes.STRING,
+    pacote: DataTypes.STRING,
     equipamento: DataTypes.STRING,
     modelo: DataTypes.STRING,
     plataforma: DataTypes.STRING,
@@ -34,7 +34,7 @@ const VersionControl = sequelize.define("VersionControl",
 }, {
 
     indexes: [
-        { name: "idx_empresa", fields: ["empresa"] },
+        { name: "idx_pacote", fields: ["pacote"] },
         { name: "idx_modelo", fields: ["modelo"] },
         { name: "idx_versao_so", fields: ["versao_so"] },
         { name: "idx_createdAt", fields: ["createdAt"] }

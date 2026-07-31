@@ -54,7 +54,7 @@ export const exportExcel = async (req, res) => {
 
         const workbook = await buildVersionExcel(version.toJSON());
 
-        const nomeArquivo = `pacote_${version.empresa || "sem_empresa"}_${version.equipamento || "sem_equipamento"}`
+        const nomeArquivo = `pacote_${version.pacote || "sem_pacote"}_${version.equipamento || "sem_equipamento"}`
             .replace(/[^a-zA-Z0-9_-]+/g, "_");
 
         res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -77,7 +77,7 @@ export const exportPdf = async (req, res) => {
 
         const pdfBuffer = await buildVersionPdf(version.toJSON());
 
-        const nomeArquivo = `pacote_${version.empresa || "sem_empresa"}_${version.equipamento || "sem_equipamento"}`
+        const nomeArquivo = `pacote_${version.pacote || "sem_pacote"}_${version.equipamento || "sem_equipamento"}`
             .replace(/[^a-zA-Z0-9_-]+/g, "_");
 
         res.setHeader("Content-Type", "application/pdf");

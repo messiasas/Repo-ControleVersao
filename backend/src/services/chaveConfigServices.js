@@ -47,7 +47,7 @@ const propagateToPackages = async (nome, userId) => {
 
 export const create = async (data, userId) => {
   const chave = await ChaveConfig.create({
-    nome: data.nome,
+    nome: data.nome.trim().toUpperCase(),
     qtd_dukpt: data.qtd_dukpt ?? 0,
     qtd_master_key: data.qtd_master_key ?? 0,
   });
@@ -60,7 +60,8 @@ export const update = async (id, data, userId) => {
   if (!before) return null;
   const oldNome = before.nome;
 
-  await ChaveConfig.update(data, { where: { id } });
+  const normalized = data.nome !== undefined ? { ...data, nome: data.nome.trim().toUpperCase() } : data;
+  await ChaveConfig.update(normalized, { where: { id } });
   const updated = await ChaveConfig.findByPk(id);
 
   await createChaveLog(userId, "UPDATE", id, { before: before.toJSON(), after: updated.toJSON() });

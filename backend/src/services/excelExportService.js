@@ -3,7 +3,7 @@ import ExcelJS from "exceljs";
 // Mesma ordem/nome de colunas usada na planilha de importação (src/data/ENVIO PAG.xlsx),
 // para manter o layout horizontal familiar a quem já usa aquela planilha.
 const COLUNAS = [
-  { header: "Empresa",                 width: 20, campo: "empresa" },
+  { header: "Pacote",                  width: 20, campo: "pacote" },
   { header: "Equipamento",             width: 18, campo: "equipamento" },
   { header: "Plataforma",              width: 14, campo: "plataforma" },
   { header: "Modelo",                  width: 22, campo: "modelo" },
@@ -103,9 +103,9 @@ export async function buildVersionExcel(version) {
   workbook.creator = "Controle de Versão";
   workbook.created = new Date();
 
-  const sheetName = sanitizeSheetName(`${version.empresa || "Pacote"} - ${version.equipamento || ""}`);
+  const sheetName = sanitizeSheetName(`${version.pacote || "Sem pacote"} - ${version.equipamento || ""}`);
   const sheet = workbook.addWorksheet(sheetName, {
-    // Congela as 2 primeiras colunas (Empresa/Equipamento) e as 3 primeiras
+    // Congela as 2 primeiras colunas (Pacote/Equipamento) e as 3 primeiras
     // linhas (título, data de exportação e cabeçalho), para essas informações
     // continuarem visíveis mesmo rolando a planilha para os lados ou para baixo.
     views: [{ state: "frozen", xSplit: 2, ySplit: 3 }],
@@ -115,7 +115,7 @@ export async function buildVersionExcel(version) {
 
   const totalColunas = COLUNAS.length;
 
-  const titleRow = sheet.insertRow(1, [`Ficha do pacote — ${version.empresa || "—"} / ${version.equipamento || "—"}`]);
+  const titleRow = sheet.insertRow(1, [`Ficha do pacote — ${version.pacote || "—"} / ${version.equipamento || "—"}`]);
   titleRow.getCell(1).font = { bold: true, size: 16, color: { argb: "FF1F2937" } };
   sheet.mergeCells(1, 1, 1, totalColunas);
 

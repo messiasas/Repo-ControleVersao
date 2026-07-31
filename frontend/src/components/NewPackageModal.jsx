@@ -5,7 +5,7 @@ import "../styles/modal.css";
 const DEFAULT_PLATAFORMAS = ["Android", "Prolin", "Monitor"];
 
 const INITIAL_FORM = {
-  empresa: "",
+  pacote: "",
   equipamento: "",
   modelo: "",
   plataforma: "",
@@ -87,17 +87,24 @@ export default function NewPackageModal({ onClose, onSuccess }) {
   }
 
   async function handleSubmit() {
-    if (!form.empresa || !form.equipamento || !form.modelo) {
-      setError("Os campos Empresa, Equipamento e Modelo são obrigatórios.");
+    if (!form.pacote || !form.equipamento || !form.modelo) {
+      setError("Os campos Pacote, Equipamento e Modelo são obrigatórios.");
       return;
     }
     setLoading(true);
     setError("");
     try {
+      const filledForm = { ...form };
+      for (const key of Object.keys(filledForm)) {
+        if (key === "qtd_chaves" || key === "possui_logo") continue;
+        if (filledForm[key] === "") filledForm[key] = "N/A";
+      }
       const res = await createVersion({
-        ...form,
+        ...filledForm,
         qtd_chaves: form.qtd_chaves !== "" ? Number(form.qtd_chaves) : null,
-        aplicacoes: aplicacoes.filter((a) => a.nome || a.versao),
+        aplicacoes: aplicacoes
+          .filter((a) => a.nome || a.versao)
+          .map((a) => ({ nome: a.nome || "N/A", versao: a.versao || "N/A" })),
         chaves: chavesList.filter((c) => c.chave),
       });
       if (res.id) {
@@ -126,8 +133,8 @@ export default function NewPackageModal({ onClose, onSuccess }) {
             <div className="form-section-title">Terminal</div>
 
             <div className="form-group">
-              <label>Empresa <span className="required">*</span></label>
-              <input className="form-input" name="empresa" value={form.empresa} onChange={handleChange} placeholder="Nome da empresa" />
+              <label>Pacote <span className="required">*</span></label>
+              <input className="form-input" name="pacote" value={form.pacote} onChange={handleChange} placeholder="Nome do pacote" />
             </div>
             <div className="form-group">
               <label>Equipamento <span className="required">*</span></label>

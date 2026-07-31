@@ -136,7 +136,7 @@ export default function EditVersionModal({ selectedRow, onClose, onSuccess }) {
 
         <div className="edit-modal-header">
           <span className="edit-header-title">Editar Pacote</span>
-          <span className="edit-header-subtitle">{form.empresa}</span>
+          <span className="edit-header-subtitle">{form.pacote}</span>
           <button className="edit-modal-close" onClick={onClose}>×</button>
         </div>
 
@@ -152,8 +152,8 @@ export default function EditVersionModal({ selectedRow, onClose, onSuccess }) {
             <div className="form-section-title">Identificação</div>
 
             <div className="form-group">
-              <label>Empresa <span className="required">*</span></label>
-              <input className="form-input" name="empresa" value={form.empresa ?? ""} onChange={handleChange} />
+              <label>Pacote <span className="required">*</span></label>
+              <input className="form-input" name="pacote" value={form.pacote ?? ""} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label>Equipamento <span className="required">*</span></label>
@@ -335,10 +335,10 @@ export default function EditVersionModal({ selectedRow, onClose, onSuccess }) {
             </div>
 
             <div className="form-group full-width delete-zone">
-              <label>Para excluir este pacote, digite o nome da empresa: <strong>{form.empresa}</strong></label>
+              <label>Para excluir este pacote, digite o nome do pacote: <strong>{form.pacote}</strong></label>
               <input
                 className="form-input delete-input"
-                placeholder={`Digite "${form.empresa}" para confirmar`}
+                placeholder={`Digite "${form.pacote}" para confirmar`}
                 value={deleteInput}
                 onChange={(e) => setDeleteInput(e.target.value)}
               />
@@ -350,7 +350,7 @@ export default function EditVersionModal({ selectedRow, onClose, onSuccess }) {
         <div className="edit-modal-footer">
           <button
             className="delete-package-button"
-            disabled={deleteInput !== form.empresa}
+            disabled={deleteInput !== form.pacote}
             onClick={() => { setPendingAction("delete"); setShowConfirm(true); setConfirmError(""); }}
           >
             Excluir pacote

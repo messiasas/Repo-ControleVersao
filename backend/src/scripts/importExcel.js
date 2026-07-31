@@ -11,7 +11,7 @@ const CAMINHO_PLANILHA = path.join(__dirname, "../data/ENVIO PAG.xlsx");
 // "Quantidade de chaves" não entra aqui: seu valor é usado só para validar
 // contra o total calculado a partir das chaves (ver calcularTotalChaves).
 const MAPA_VERSAO = {
-  "Empresa":                "empresa",
+  "Pacote":                 "pacote",
   "Equipamento":            "equipamento",
   "Plataforma":             "plataforma",
   "Modelo":                 "modelo",
@@ -50,11 +50,16 @@ function extrairApp(linha) {
   return { nome: nome || "", versao: versao || "" };
 }
 
-// A coluna "Chaves" pode trazer mais de uma chave separada por vírgula, ponto e vírgula ou quebra de linha.
+// Valores que significam "sem chave", não uma chave chamada literalmente "N/A".
+const MARCADORES_SEM_CHAVE = new Set(["n/a", "na", "não", "nao", "-", ""]);
+
+// A coluna "Chaves" pode trazer mais de uma chave separada por vírgula, ponto e vírgula, barra ou quebra de linha.
 function extrairChaves(linha) {
   const bruto = linha["Chaves"];
   if (typeof bruto !== "string") return [];
-  return bruto.split(/[,;\n]/).map((v) => v.trim()).filter(Boolean);
+  const limpo = bruto.trim();
+  if (MARCADORES_SEM_CHAVE.has(limpo.toLowerCase())) return [];
+  return limpo.split(/[,;/\n]/).map((v) => v.trim()).filter(Boolean);
 }
 
 function normalizarNomeChave(nome) {
@@ -134,9 +139,9 @@ async function importar() {
     const qtdPlanilha = normalizar(linha["Quantidade de chaves"], "qtd_chaves");
     const { total: totalCalculado, chavesSemConfig } = calcularTotalChaves(chaves, configMap);
 
-    if (qtdPlanilha != null && qtdPlanilha !== totalCalculado) {
+    if (qtdPlanilha != null && qtdPlanilha !== 0 && qtdPlanilha !== totalCalculado) {
       rejeitados.push({
-        empresa: dadosVersao.empresa,
+        pacote: dadosVersao.pacote,
         equipamento: dadosVersao.equipamento,
         chaves,
         qtdPlanilha,
@@ -144,7 +149,7 @@ async function importar() {
         chavesSemConfig,
       });
       console.warn(
-        `  [REJEITADO] ${dadosVersao.empresa} / ${dadosVersao.equipamento} — planilha diz ${qtdPlanilha} chave(s), ` +
+        `  [REJEITADO] ${dadosVersao.pacote} / ${dadosVersao.equipamento} — planilha diz ${qtdPlanilha} chave(s), ` +
         `mas o cálculo a partir de "${chaves.join(", ")}" deu ${totalCalculado}` +
         (chavesSemConfig.length > 0 ? ` (sem configuração cadastrada: ${chavesSemConfig.join(", ")})` : "")
       );
@@ -179,7 +184,7 @@ async function importar() {
       );
     }
 
-    console.log(`  [${importados + 1}] ${dadosVersao.empresa} / ${dadosVersao.equipamento} — ${aplicacoes.length} aplicação(ões), ${chaves.length} chave(s)`);
+    console.log(`  [${importados + 1}] ${dadosVersao.pacote} / ${dadosVersao.equipamento} — ${aplicacoes.length} aplicação(ões), ${chaves.length} chave(s)`);
     importados++;
   }
 
@@ -187,7 +192,7 @@ async function importar() {
   if (rejeitados.length > 0) {
     console.log(`${rejeitados.length} pacote(s) rejeitado(s) por divergência na quantidade de chaves:`);
     for (const r of rejeitados) {
-      console.log(`  - ${r.empresa} / ${r.equipamento}: planilha=${r.qtdPlanilha}, calculado=${r.totalCalculado}, chaves=[${r.chaves.join(", ")}]`);
+      console.log(`  - ${r.pacote} / ${r.equipamento}: planilha=${r.qtdPlanilha}, calculado=${r.totalCalculado}, chaves=[${r.chaves.join(", ")}]`);
     }
   }
 

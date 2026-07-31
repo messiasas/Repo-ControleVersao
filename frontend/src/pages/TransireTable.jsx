@@ -10,7 +10,7 @@ import { openVersionView } from "../utils/openVersionView.js";
 
 function TransireTable(){
     const [data, setData] = useState([]);
-    const [filtros, setFiltros] = useState({ empresa: "", equipamento: "", plataforma: "" });
+    const [filtros, setFiltros] = useState({ pacote: "", equipamento: "", plataforma: "" });
     const [selectedRow, setSelectedRow] = useState(null);
     const [showSobre, setShowSobre] = useState(false);
 
@@ -124,12 +124,12 @@ function TransireTable(){
                   Principais funcionalidades
                 </p>
                 <ul style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 7, fontSize: 14, color: "#374151", lineHeight: 1.6 }}>
-                  <li>Consulta e filtragem de versões por empresa, modelo e equipamento</li>
+                  <li>Consulta e filtragem de versões por pacote, modelo e equipamento</li>
                   <li>Registro de novos pacotes com controle de versão de SO, firmware, aplicações e conectividade</li>
                   <li>Visualização detalhada por equipamento com painel de informações completo</li>
                   <li>Histórico de alterações com rastreabilidade de pacotes aplicados</li>
                   <li>Gestão de aplicações embarcadas com nome e versão individuais</li>
-                  <li>Controle de chaves, configurador e personalização por empresa</li>
+                  <li>Controle de chaves, configurador e personalização por pacote</li>
                 </ul>
               </div>
 
@@ -138,7 +138,7 @@ function TransireTable(){
                 <ol style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 5, fontSize: 14, color: "#374151", lineHeight: 1.6 }}>
                   <li>Selecione uma linha na tabela para destacar o equipamento desejado</li>
                   <li>Use <strong>Visualizar</strong> para abrir o painel completo em nova aba</li>
-                  <li>Utilize a barra de busca para filtrar por empresa, modelo ou versão</li>
+                  <li>Utilize a barra de busca para filtrar por pacote, modelo ou versão</li>
                 </ol>
               </div>
 

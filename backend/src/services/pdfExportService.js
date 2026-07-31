@@ -15,7 +15,7 @@ const COR_LINHA = "#e5e7eb";
 const MARGEM = 50;
 
 const IDENTIFICACAO_FIELDS = [
-  ["Empresa", "empresa"],
+  ["Pacote", "pacote"],
   ["Equipamento", "equipamento"],
   ["Modelo", "modelo"],
   ["Plataforma", "plataforma"],
@@ -193,7 +193,7 @@ export async function buildVersionPdf(version) {
     .font("Helvetica-Bold")
     .fontSize(16)
     .fillColor(COR_TITULO)
-    .text(`Ficha do pacote — ${version.empresa || "—"} / ${version.equipamento || "—"}`, MARGEM, doc.y, {
+    .text(`Ficha do pacote — ${version.pacote || "—"} / ${version.equipamento || "—"}`, MARGEM, doc.y, {
       width: larguraUtil(doc),
     });
 
