@@ -375,50 +375,6 @@
   grid-column: 1 / -1;
 }
 
-.chave-history-section {
-  margin-top: 24px;
-  border-top: 1px solid #e5e7eb;
-  padding-top: 16px;
-}
-
-.chave-history-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #374151;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 10px;
-  display: block;
-}
-
-.chave-history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-height: 180px;
-  overflow-y: auto;
-}
-
-.chave-history-item {
-  font-size: 13px;
-  color: #4b5563;
-  background: #f9fafb;
-  border-radius: 6px;
-  padding: 8px 10px;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.chave-history-item strong {
-  color: #1f2937;
-}
-
-.chave-history-meta {
-  color: #9ca3af;
-  white-space: nowrap;
-}
-
 .chaves-section-title {
   display: flex;
   align-items: baseline;

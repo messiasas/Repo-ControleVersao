@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getChaveConfigs } from "../services/api.js";
 import "../styles/VersionView.css";
 
+const upper = (value) => (value == null ? value : String(value).toUpperCase());
+
 function VersionView() {
 
     const [versionData, setVersionData] = useState(null);
@@ -44,7 +46,7 @@ function VersionView() {
             <h2>Pacote</h2>
 
             <div className="info-row">
-                <span className="info-value">{versionData?.pacote}</span>
+                <span className="info-value">{upper(versionData?.pacote)}</span>
             </div>
 
             <div className="info-row">
@@ -62,7 +64,7 @@ function VersionView() {
 
             <div className="info-row">
                 <span className="info-label">Equipamento</span>
-                <span className="info-value">{versionData?.equipamento}</span>
+                <span className="info-value">{upper(versionData?.equipamento)}</span>
             </div>
 
             <div className="info-row">
@@ -72,7 +74,7 @@ function VersionView() {
 
             <div className="info-row">
                 <span className="info-label">Modelo</span>
-                <span className="info-value">{versionData?.modelo}</span>
+                <span className="info-value">{upper(versionData?.modelo)}</span>
             </div>
 
         </div>
@@ -119,12 +121,12 @@ function VersionView() {
 
             <div className="info-row">
                 <span className="info-label">Wi-Fi</span>
-                <span className="info-value">{versionData?.versao_wifi}</span>
+                <span className="info-value">{upper(versionData?.versao_wifi)}</span>
             </div>
 
             <div className="info-row">
                 <span className="info-label">GPRS</span>
-                <span className="info-value">{versionData?.versao_gprs}</span>
+                <span className="info-value">{upper(versionData?.versao_gprs)}</span>
             </div>
 
         </div>
@@ -136,7 +138,7 @@ function VersionView() {
             <div className="info-row">
                 <span className="info-label">PUK/CRC</span>
                 <span className="info-value">
-                    {versionData?.puk_crc}
+                    {upper(versionData?.puk_crc)}
                 </span>
             </div>
 
@@ -181,7 +183,7 @@ function VersionView() {
                                     {versionData.chaves.map((c, i) => (
                                         <tr key={i}>
                                             <td>{i + 1}</td>
-                                            <td>{c.chave || "—"}</td>
+                                            <td>{upper(c.chave) || "—"}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -190,7 +192,7 @@ function VersionView() {
                     ) : (
                         <ul className="apps-text-list">
                             {versionData.chaves.map((c, i) => (
-                                <li key={i}>{c.chave || "—"}</li>
+                                <li key={i}>{upper(c.chave) || "—"}</li>
                             ))}
                         </ul>
                     )
@@ -221,7 +223,7 @@ function VersionView() {
             <div className="info-row">
                 <span className="info-label">Tipo</span>
                 <span className="info-value">
-                    {versionData?.tipo_chaves}
+                    {upper(versionData?.tipo_chaves)}
                 </span>
             </div>
 

@@ -41,12 +41,14 @@ function AppVersaoCell({ data }) {
   );
 }
 
+const upper = (value) => (value == null ? value : String(value).toUpperCase());
+
 function ChaveCell({ data }) {
   const chaves = data?.chaves;
 
   if (!chaves || chaves.length === 0) return <span>—</span>;
 
-  if (chaves.length === 1) return <span>{chaves[0].chave || "—"}</span>;
+  if (chaves.length === 1) return <span>{upper(chaves[0].chave) || "—"}</span>;
 
   function handleVer() {
     openVersionView(data);
@@ -60,10 +62,10 @@ function ChaveCell({ data }) {
 }
 
 const columns = [
-  { field: "pacote",     rowGroup: true, headerName: "Pacote", filter: true, minWidth: 200 },
-  { field: "equipamento", filter: true, minWidth: 200 },
+  { field: "pacote",     rowGroup: true, headerName: "Pacote", filter: true, minWidth: 200, valueFormatter: (p) => upper(p.value) },
+  { field: "equipamento", filter: true, minWidth: 200, valueFormatter: (p) => upper(p.value) },
   { field: "plataforma", headerName: "Plataforma", filter: true, minWidth: 180 },
-  { field: "modelo",     rowGroup: true, headerName: "Modelo", filter: true, minWidth: 180 },
+  { field: "modelo",     rowGroup: true, headerName: "Modelo", filter: true, minWidth: 180, valueFormatter: (p) => upper(p.value) },
   { field: "fw",         headerName: "FW",           filter: true, minWidth: 140 },
   { field: "sphs",       headerName: "SPHS",         filter: true, minWidth: 140 },
   { field: "firmware_version", headerName: "Firmware version", filter: true, minWidth: 160 },
@@ -71,7 +73,7 @@ const columns = [
   { field: "versao_so",  headerName: "Versão SO",    filter: true, minWidth: 400 },
   { field: "security_version", headerName: "Security Version(SV)", filter: true, minWidth: 220 },
   { field: "firmware",                                filter: true,minWidth: 400 },
-  { field: "puk_crc",    headerName: "PUK/CRC",      filter: true, minWidth: 300 },
+  { field: "puk_crc",    headerName: "PUK/CRC",      filter: true, minWidth: 300, valueFormatter: (p) => upper(p.value) },
   {
     field: "aplicacoes",
     headerName: "Aplicação",
@@ -87,8 +89,8 @@ const columns = [
     minWidth: 200,
   },
   { field: "versao_bt",  headerName: "Versão BT",    filter: true, minWidth: 300 },
-  { field: "versao_wifi", headerName: "Wi-Fi",       filter: true, minWidth: 300 },
-  { field: "versao_gprs", headerName: "GPRS",        filter: true , minWidth: 300},
+  { field: "versao_wifi", headerName: "Wi-Fi",       filter: true, minWidth: 300, valueFormatter: (p) => upper(p.value) },
+  { field: "versao_gprs", headerName: "GPRS",        filter: true , minWidth: 300, valueFormatter: (p) => upper(p.value) },
   {
     field: "possui_logo",
     headerName: "Possui logo",
@@ -102,13 +104,13 @@ const columns = [
     field: "chaves",
     headerName: "Chaves",
     cellRenderer: ChaveCell,
-    valueGetter: (p) => (p.data?.chaves || []).map((c) => c.chave).filter(Boolean).join(", "),
+    valueGetter: (p) => upper((p.data?.chaves || []).map((c) => c.chave).filter(Boolean).join(", ")),
     minWidth: 250,
   },
   { field: "qtd_chaves",   headerName: "Qtd Chaves",  filter: true },
   { field: "configurador", headerName: "Configurador", filter: true },
   { field: "fonte",        headerName: "Fonte",        filter: true },
-  { field: "tipo_chaves",  headerName: "Tipo chave",  filter: true },
+  { field: "tipo_chaves",  headerName: "Tipo chave",  filter: true, valueFormatter: (p) => upper(p.value) },
   {
     field: "createdAt",
     headerName: "Data",

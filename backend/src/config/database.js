@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 dotenv.config(); // take configs insert on .env file
 
 const sequelize = new Sequelize({
+    port: process.env.DB_PORT,
     database: process.env.DB_NAME,
     username: process.env.DB_USER,
     password: process.env.DB_PASS,

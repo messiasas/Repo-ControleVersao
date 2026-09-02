@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/api.js";
+import TopNav from "../components/TopNav.jsx";
 import logo from "../assets/transire-img.png";
 import logoSuporte from "../assets/logo-suporte.png";
 import "../styles/login.css";
@@ -40,9 +41,7 @@ function Login() {
 
   return (
     <div className="login-page">
-      <div className="login-header">
-        <span className="login-header-title">Controle de versão</span>
-      </div>
+      <TopNav />
 
       <div className="login-container">
         <div className="login-panel">

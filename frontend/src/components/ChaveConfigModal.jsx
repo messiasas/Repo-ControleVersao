@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   login,
   getChaveConfigs,
-  getChaveConfigLogs,
   createChaveConfig,
   updateChaveConfig,
   deleteChaveConfig,
@@ -12,46 +11,9 @@ import "../styles/editVersion.css";
 
 const EMPTY_NOVA_CHAVE = { nome: "", qtd_dukpt: "", qtd_master_key: "" };
 
-function formatLog(log) {
-  const details = log.details ? JSON.parse(log.details) : null;
-  const when = new Date(log.createdAt).toLocaleString("pt-BR");
-  const who = log.user?.email || "—";
-
-  if (!details) return { text: "Alteração de chave.", when, who };
-
-  if (log.action === "CREATE") {
-    return {
-      text: `Chave "${details.nome}" criada (DUKPT: ${details.qtd_dukpt ?? 0}, Master Key: ${details.qtd_master_key ?? 0})`,
-      when,
-      who,
-    };
-  }
-
-  if (log.action === "DELETE") {
-    return { text: `Chave "${details.nome}" excluída`, when, who };
-  }
-
-  if (log.action === "UPDATE" && details.before && details.after) {
-    const { before, after } = details;
-    const changes = [];
-    if (before.nome !== after.nome) changes.push(`nome: ${before.nome} → ${after.nome}`);
-    if (Number(before.qtd_dukpt) !== Number(after.qtd_dukpt)) {
-      changes.push(`DUKPT: ${before.qtd_dukpt ?? 0} → ${after.qtd_dukpt ?? 0}`);
-    }
-    if (Number(before.qtd_master_key) !== Number(after.qtd_master_key)) {
-      changes.push(`Master Key: ${before.qtd_master_key ?? 0} → ${after.qtd_master_key ?? 0}`);
-    }
-    const changeText = changes.length > 0 ? changes.join(", ") : "sem alterações de valor";
-    return { text: `Chave "${after.nome}" atualizada (${changeText})`, when, who };
-  }
-
-  return { text: "Alteração de chave.", when, who };
-}
-
 export default function ChaveConfigModal({ onClose }) {
   const [tab, setTab] = useState("existentes");
   const [chaves, setChaves] = useState([]);
-  const [logs, setLogs] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [novaChave, setNovaChave] = useState({ ...EMPTY_NOVA_CHAVE });
@@ -84,9 +46,8 @@ export default function ChaveConfigModal({ onClose }) {
   }
 
   async function load() {
-    const [chavesData, logsData] = await Promise.all([getChaveConfigs(), getChaveConfigLogs()]);
+    const chavesData = await getChaveConfigs();
     setChaves(Array.isArray(chavesData) ? chavesData : []);
-    setLogs(Array.isArray(logsData) ? logsData : []);
   }
 
   function handleFieldChange(id, field, value) {
@@ -329,25 +290,6 @@ export default function ChaveConfigModal({ onClose }) {
                     )}
                   </tbody>
                 </table>
-              </div>
-
-              <div className="chave-history-section">
-                <span className="chave-history-title">Histórico de alterações</span>
-                {logs.length === 0 ? (
-                  <p style={{ margin: 0, color: "#9ca3af", fontSize: 13 }}>Nenhuma alteração registrada ainda.</p>
-                ) : (
-                  <div className="chave-history-list">
-                    {logs.map((log) => {
-                      const { text, when, who } = formatLog(log);
-                      return (
-                        <div key={log.id} className="chave-history-item">
-                          <span><strong>{text}</strong> — por {who}</span>
-                          <span className="chave-history-meta">{when}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
               </div>
             </>
           ) : (

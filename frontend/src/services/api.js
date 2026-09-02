@@ -45,6 +45,36 @@ export const createUser = async (email, password) => {
   return response.json();
 };
 
+export const getUsers = async () => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/users`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.json();
+};
+
+export const updateUser = async (id, data) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/users/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
+export const deleteUser = async (id) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/users/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.json();
+};
+
 export const deleteVersion = async (id) => {
   const token = localStorage.getItem("token");
   const response = await fetch(`${BASE_URL}/versions/${id}`, {
@@ -92,10 +122,6 @@ export const createVersion = async (data) => {
   });
   return response.json();
 };
-
-export const exportVersionExcelUrl = (id) => `${BASE_URL}/versions/${id}/export`;
-
-export const exportVersionPdfUrl = (id) => `${BASE_URL}/versions/${id}/export-pdf`;
 
 export const getChaveConfigs = async () => {
   const response = await fetch(`${BASE_URL}/chave-configs`);
