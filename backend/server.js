@@ -1,7 +1,7 @@
 import app from "./src/app.js"
 import sequelize from "./src/config/database.js"
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 async function startServer(){
     try{
@@ -15,6 +15,7 @@ async function startServer(){
         });
     } catch (error) {
         console.error("Erro ao conectar no banco:", error);
+        process.exit(1);
     }
 }
 

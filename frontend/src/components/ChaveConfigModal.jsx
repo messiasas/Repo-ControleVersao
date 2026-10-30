@@ -6,6 +6,7 @@ import {
   updateChaveConfig,
   deleteChaveConfig,
 } from "../services/api.js";
+import { normalizarNome } from "../utils/chaves.js";
 import "../styles/modal.css";
 import "../styles/editVersion.css";
 
@@ -20,6 +21,8 @@ export default function ChaveConfigModal({ onClose }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [calcInput, setCalcInput] = useState("");
+  const [calcResult, setCalcResult] = useState(null);
 
   const [showAuthConfirm, setShowAuthConfirm] = useState(false);
   const [authTarget, setAuthTarget] = useState(null);
@@ -61,6 +64,55 @@ export default function ChaveConfigModal({ onClose }) {
   const filteredChaves = searchTerm
     ? chaves.filter((c) => (c.nome ?? "").toLowerCase().includes(searchTerm))
     : chaves;
+
+  async function handleCalcular() {
+    const nomes = [];
+    const vistos = new Set();
+    calcInput
+      .split(/[\/,;\n]+/)
+      .map((n) => n.trim())
+      .filter(Boolean)
+      .forEach((n) => {
+        const key = normalizarNome(n);
+        if (!vistos.has(key)) {
+          vistos.add(key);
+          nomes.push(n);
+        }
+      });
+
+    if (nomes.length === 0) {
+      setCalcResult(null);
+      return;
+    }
+
+    let lista = chaves;
+    try {
+      const atual = await getChaveConfigs();
+      if (Array.isArray(atual)) {
+        lista = atual;
+        setChaves(atual);
+      }
+    } catch {
+      // usa a lista já carregada
+    }
+
+    const porNome = new Map(lista.map((c) => [normalizarNome(c.nome), c]));
+    const itens = nomes.map((nome) => {
+      const chave = porNome.get(normalizarNome(nome));
+      if (!chave) return { nome, encontrada: false };
+      const dukpt = Number(chave.qtd_dukpt) || 0;
+      const masterKey = Number(chave.qtd_master_key) || 0;
+      return { nome: chave.nome, encontrada: true, dukpt, masterKey, total: dukpt + masterKey };
+    });
+
+    const encontradas = itens.filter((i) => i.encontrada);
+    setCalcResult({
+      itens,
+      dukpt: encontradas.reduce((s, i) => s + i.dukpt, 0),
+      masterKey: encontradas.reduce((s, i) => s + i.masterKey, 0),
+      total: encontradas.reduce((s, i) => s + i.total, 0),
+    });
+  }
 
   function requestSave(chave) {
     setAuthTarget(chave);
@@ -206,15 +258,83 @@ export default function ChaveConfigModal({ onClose }) {
             >
               Nova chave
             </button>
+            <button
+              type="button"
+              className={`modal-tab-btn${tab === "calcular" ? " active" : ""}`}
+              onClick={() => setTab("calcular")}
+            >
+              Calcular chaves
+            </button>
           </div>
 
-          <p className="form-hint">
-            Cada chave é composta por uma quantidade de DUKPT e de Master Key. O total de cada chave
-            (DUKPT + Master Key) é somado automaticamente na quantidade de chaves do pacote quando ela for selecionada.
-            Alterar a quantidade de uma chave já existente atualiza automaticamente todos os pacotes que a utilizam.
-          </p>
+          {tab === "calcular" ? (
+            <p className="form-hint">
+              Informe os nomes das chaves separados por "/" (ex.: Entrepay/Zoop). O app busca cada chave
+              cadastrada e mostra o valor de cada uma e o total. Esta aba apenas consulta, nada é alterado.
+            </p>
+          ) : (
+            <p className="form-hint">
+              Cada chave é composta por uma quantidade de DUKPT e de Master Key. O total de cada chave
+              (DUKPT + Master Key) é somado automaticamente na quantidade de chaves do pacote quando ela for selecionada.
+              Alterar a quantidade de uma chave já existente atualiza automaticamente todos os pacotes que a utilizam.
+            </p>
+          )}
 
-          {tab === "existentes" ? (
+          {tab === "calcular" ? (
+            <>
+              <div className="chave-config-search">
+                <input
+                  className="form-input"
+                  placeholder="Ex.: Entrepay/Zoop"
+                  value={calcInput}
+                  onChange={(e) => setCalcInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleCalcular()}
+                />
+                <button type="button" className="modal-btn-submit" onClick={handleCalcular}>
+                  Calcular
+                </button>
+              </div>
+
+              {calcResult && (
+                <div className="chave-config-table-wrapper">
+                  <table className="chave-config-table">
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th>DUKPT</th>
+                        <th>Master Key</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {calcResult.itens.map((item) => (
+                        <tr key={item.nome}>
+                          <td>{item.nome}</td>
+                          {item.encontrada ? (
+                            <>
+                              <td>{item.dukpt}</td>
+                              <td>{item.masterKey}</td>
+                              <td className="chave-config-total">{item.total}</td>
+                            </>
+                          ) : (
+                            <td colSpan={3} className="chave-calc-not-found">Chave não encontrada</td>
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className="chave-calc-total-row">
+                        <td>Total</td>
+                        <td>{calcResult.dukpt}</td>
+                        <td>{calcResult.masterKey}</td>
+                        <td className="chave-config-total">{calcResult.total}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              )}
+            </>
+          ) : tab === "existentes" ? (
             <>
               <div className="chave-config-search">
                 <input

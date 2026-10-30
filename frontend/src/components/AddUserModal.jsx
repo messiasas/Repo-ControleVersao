@@ -136,6 +136,10 @@ export default function AddUserModal({ onClose, onSuccess }) {
       setDeleteError("Preencha e-mail e senha.");
       return;
     }
+    if (deleteEmail.trim().toLowerCase() === deleteTarget.email.toLowerCase()) {
+      setDeleteError("Informe as credenciais de outro administrador, não as do usuário que será excluído.");
+      return;
+    }
     setDeleteLoading(true);
     setDeleteError("");
     try {
@@ -152,7 +156,7 @@ export default function AddUserModal({ onClose, onSuccess }) {
         await loadUsers();
         notify("Usuário excluído com sucesso!");
       } else {
-        setDeleteError(res.message || "Erro ao excluir usuário.");
+        setDeleteError(res.message || res.error || "Erro ao excluir usuário.");
       }
     } catch {
       setDeleteError("Erro ao conectar com o servidor.");

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createVersion, getChaveConfigs, getDistinctPlataformas } from "../services/api.js";
+import { findChaveConfig } from "../utils/chaves.js";
 import "../styles/modal.css";
 
 const DEFAULT_PLATAFORMAS = ["Android", "Prolin", "Monitor"];
@@ -48,7 +49,7 @@ export default function NewPackageModal({ onClose, onSuccess }) {
 
   useEffect(() => {
     const total = chavesList.reduce((sum, c) => {
-      const config = chaveConfigs.find((cc) => cc.nome === c.chave);
+      const config = findChaveConfig(chaveConfigs, c.chave);
       if (!config) return sum;
       return sum + (Number(config.qtd_dukpt) || 0) + (Number(config.qtd_master_key) || 0);
     }, 0);

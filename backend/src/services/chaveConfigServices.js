@@ -1,6 +1,7 @@
 import { ChaveConfig, ChaveConfigLog, ChaveVersao, VersionControl, User } from "../models/index.js";
 import { createLog } from "./logServices.js";
 import * as versionRepo from "../repositories/versionRepository.js";
+import { normalizarNome } from "../utils/chaves.js";
 
 export const getAll = () => ChaveConfig.findAll({ order: [["nome", "ASC"]] });
 
@@ -23,17 +24,18 @@ const createChaveLog = (userId, action, chaveConfigId, details) =>
 // precisam ter a quantidade de chaves recalculada, e essa recalculagem entra
 // no histórico do próprio pacote (mesmo fluxo usado em qualquer outra edição).
 const propagateToPackages = async (nome, userId) => {
-  const usos = await ChaveVersao.findAll({ where: { chave: nome }, attributes: ["version_control_id"] });
-  const versionIds = [...new Set(usos.map((u) => u.version_control_id))];
+  const alvo = normalizarNome(nome);
+  const usos = await ChaveVersao.findAll({ attributes: ["version_control_id", "chave"] });
+  const versionIds = [...new Set(usos.filter((u) => normalizarNome(u.chave) === alvo).map((u) => u.version_control_id))];
   if (versionIds.length === 0) return;
 
   const configs = await ChaveConfig.findAll();
-  const configMap = new Map(configs.map((c) => [c.nome, c]));
+  const configMap = new Map(configs.map((c) => [normalizarNome(c.nome), c]));
 
   for (const versionId of versionIds) {
     const chaves = await ChaveVersao.findAll({ where: { version_control_id: versionId } });
     const qtd_chaves = chaves.reduce((sum, c) => {
-      const config = configMap.get(c.chave);
+      const config = configMap.get(normalizarNome(c.chave));
       return sum + (config ? (Number(config.qtd_dukpt) || 0) + (Number(config.qtd_master_key) || 0) : 0);
     }, 0);
 

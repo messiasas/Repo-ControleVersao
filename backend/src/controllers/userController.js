@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
-import { User } from "../models/index.js";
+import { User, Log, ChaveConfigLog } from "../models/index.js";
+import sequelize from "../config/database.js";
 
 export const createUser = async (req, res) => {
   try {
@@ -73,7 +74,12 @@ export const deleteUser = async (req, res) => {
     if (!user)
       return res.status(404).json({ message: "Usuário não encontrado." });
 
-    await user.destroy();
+    // Desvincula os logs do usuário para não violar a FK e preservar o histórico
+    await sequelize.transaction(async (t) => {
+      await Log.update({ user_id: null }, { where: { user_id: id }, transaction: t });
+      await ChaveConfigLog.update({ user_id: null }, { where: { user_id: id }, transaction: t });
+      await user.destroy({ transaction: t });
+    });
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });

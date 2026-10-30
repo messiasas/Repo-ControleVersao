@@ -314,6 +314,18 @@
   text-align: center;
 }
 
+.chave-calc-not-found {
+  color: #b91c1c;
+  font-style: italic;
+}
+
+.chave-calc-total-row td {
+  font-weight: 700;
+  color: #005C73;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 10px;
+}
+
 .chave-config-actions {
   display: flex;
   gap: 8px;

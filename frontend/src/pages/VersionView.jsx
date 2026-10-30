@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getChaveConfigs } from "../services/api.js";
+import { findChaveConfig } from "../utils/chaves.js";
 import "../styles/VersionView.css";
 
 const upper = (value) => (value == null ? value : String(value).toUpperCase());
@@ -30,12 +31,12 @@ function VersionView() {
     }, []);
 
     const totalDukpt = (versionData?.chaves || []).reduce((sum, c) => {
-        const config = chaveConfigs.find((cc) => cc.nome === c.chave);
+        const config = findChaveConfig(chaveConfigs, c.chave);
         return sum + (config ? Number(config.qtd_dukpt) || 0 : 0);
     }, 0);
 
     const totalMasterKey = (versionData?.chaves || []).reduce((sum, c) => {
-        const config = chaveConfigs.find((cc) => cc.nome === c.chave);
+        const config = findChaveConfig(chaveConfigs, c.chave);
         return sum + (config ? Number(config.qtd_master_key) || 0 : 0);
     }, 0);
 

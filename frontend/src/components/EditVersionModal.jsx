@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { login, updateVersion, deleteVersion, getChaveConfigs, getDistinctPlataformas } from "../services/api.js";
+import { findChaveConfig } from "../utils/chaves.js";
 import "../styles/editVersion.css";
 import "../styles/modal.css";
 
@@ -41,7 +42,7 @@ export default function EditVersionModal({ selectedRow, onClose, onSuccess }) {
 
   useEffect(() => {
     const total = chavesList.reduce((sum, c) => {
-      const config = chaveConfigs.find((cc) => cc.nome === c.chave);
+      const config = findChaveConfig(chaveConfigs, c.chave);
       if (!config) return sum;
       return sum + (Number(config.qtd_dukpt) || 0) + (Number(config.qtd_master_key) || 0);
     }, 0);
