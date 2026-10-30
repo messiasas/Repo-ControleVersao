@@ -1,0 +1,51 @@
+version: "2.4"
+
+services:
+  cv-mysql:
+    image: mysql:8.0
+    command: --lower-case-table-names=1
+    container_name: cv-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: controle_versao
+      MYSQL_USER: cv_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - cv_mysql_data:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # Sem "ports": o banco NÃO fica acessível de fora do Docker
+
+  cv-backend:
+    build: ./backend
+    container_name: cv-backend
+    restart: unless-stopped
+    environment:
+      DB_HOST: cv-mysql
+      DB_PORT: 3306
+      DB_NAME: controle_versao
+      DB_USER: cv_user
+      DB_PASS: ${MYSQL_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 3000
+    depends_on:
+      cv-mysql:
+        condition: service_healthy
+    # Sem "ports": só o frontend fala com ele
+
+  cv-frontend:
+    build: ./frontend
+    container_name: cv-frontend
+    restart: unless-stopped
+    ports:
+      - "3010:80"
+    depends_on:
+      - cv-backend
+
+volumes:
+  cv_mysql_data:
